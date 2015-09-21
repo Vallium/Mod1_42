@@ -48,7 +48,7 @@ $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.cpp
 init:
 	git submodule init
 	git submodule update
-	cmake glfw
+	cd glfw ; cmake .
 	make -C glfw
 
 clean:
