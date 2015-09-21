@@ -10,8 +10,8 @@ STATIC_DIR	= static
 DEP_DIR		= dep
 
 
-INCLUDES	=
-LIBS		= -framework OpenGL
+INCLUDES	= -I glfw/include
+LIBS		= -Lglfw -lglfw -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
