@@ -28,13 +28,14 @@ $(shell mkdir -p $(STATIC_DIR) $(DEBUG_DIR) $(DEP_DIR))
 .PHONY: clean fclean re debug
 
 all: $(NAME)
-	@echo "Compilation terminee. (realease)"
 
 $(NAME): $(OBJ)
 	$(CXX) $(OPTI) $(CXXFLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $@ $(OBJ) $(LIBS)
+	@echo "Compilation terminee. (realease)"
 
 debug: $(OBJ_DEBUG)
 	$(CXX) $(OPTI) $(CXXFLAGS) -I $(HEAD_DIR) $(INCLUDES) -o $(NAME_DEBUG) $(OBJ_DEBUG) $(LIBS) -g
+	@echo "Compilation terminee. (debug)"
 
 -include $(OBJ:.o=.d)
 
