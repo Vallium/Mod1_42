@@ -16,20 +16,27 @@ std::vector<std::string>		split(std::string str, char delimiter) {
 	return internal;
 }
 
-void		extract(std::string name) {
+std::vector<int>		parse(std::string name) {
 	std::ifstream			file;
 	std::string				line;
+	std::vector<int>		out;
 
 	file.open(name.data());
 	while (std::getline(file, line)) {
 		std::vector<std::string> pts = split(line, ' ');
 		for (auto pt = pts.begin(); pt != pts.end(); ++pt) {
 			std::string tmp = pt->substr(1, pt->size() - 2);
+
 			std::vector<std::string> coords = split(tmp, ',');
-			std::cout << coords[0] << " " << coords[1] << " " << coords[2] << std::endl;
+
+			// std::cout << coords[0] << " " << coords[1] << " " << coords[2] << std::endl;
+			out.push_back(stoi(coords[0]));
+			out.push_back(stoi(coords[1]));
+			out.push_back(stoi(coords[2]));
 		}
 	}
 	file.close();
+	return out;
 }
 
 int			main(int ac, char *av[]) {
@@ -44,7 +51,19 @@ int			main(int ac, char *av[]) {
 		return -1;
 	}
 	else {
-		extract(std::string(av[1]));
+		std::vector<int> pts = parse(std::string(av[1]));
+		int xmin, xmax, ymin, ymax = -1;
+		for (int i = 0; i < pts.size() / 3; i++)
+		{
+			if (xmin == -1 or pts[i*3] < xmin)
+				xmin = pts[i*3];
+			if (xmax == -1 or pts[i*3] > xmax)
+				xmax = pts[i*3];
+			if (ymin == -1 or pts[i*3+1] < ymin)
+				ymin = pts[i*3+1];
+			if (ymax == -1 or pts[i*3+1] > ymax)
+				ymax = pts[i*3+1];
+		}
 	}
 	// /* Create a windowed mode window and its OpenGL context */
 	// window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
