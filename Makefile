@@ -11,7 +11,7 @@ DEP_DIR		= dep
 
 
 INCLUDES	= -I glfw/include
-LIBS		= -Lglfw -lglfw -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+LIBS		= -Lglfw/src -lglfw -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 OBJ				= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG		= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
