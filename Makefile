@@ -1,7 +1,7 @@
 NAME		= mod1
 NAME_DEBUG	= mod1_debug
 
-SRC		=	main.cpp
+SRC			= main.cpp
 
 HEAD_DIR	= include
 SRC_DIR		= src
