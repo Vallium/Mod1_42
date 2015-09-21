@@ -25,7 +25,7 @@ DEPENDS 	= -MT $@ -MD -MP -MF $(subst .o,.d,$@)
 $(shell mkdir -p $(STATIC_DIR) $(DEBUG_DIR) $(DEP_DIR))
 
 
-.PHONY: clean fclean re debug
+.PHONY: clean fclean re debug init
 
 all: $(NAME)
 
@@ -44,6 +44,12 @@ $(STATIC_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 $(DEBUG_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(OPTI) $(CXXFLAGS) $(DEPENDS) -I $(HEAD_DIR) $(INCLUDES) -o $@ -c $< -g
+
+init:
+	git submodule init
+	git submodule update
+	cmake glfw
+	make -C glfw
 
 clean:
 	rm -f $(OBJ) $(OBJ_DEBUG) $(DEPS)
