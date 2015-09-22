@@ -39,7 +39,7 @@ std::vector<int>		parse(std::string name) {
 	return out;
 }
 
-int			**create_tab(std::vector<int> pts) {
+int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
 	int		**tab = nullptr;
 	int xmin, xmax, ymin, ymax = -1;
 
@@ -54,19 +54,21 @@ int			**create_tab(std::vector<int> pts) {
 			ymax = pts[i + 1];
 	}
 
-	// int		tab[xmax - xmin + 1][ymax - ymin + 1];
-	*tab = new int[xmax - xmin + 1];
-	for (size_t x = 0; x < xmax - xmin; x++) {
+	sizeX = xmax - xmin + 1;
+	sizeY = ymax - ymin + 1;
+
+	tab = new int*[xmax - xmin + 1];
+	for (int x = 0; x < xmax - xmin + 1; x++) {
 		tab[x] = new int[ymax - ymin + 1];
-		for (size_t y = 0; y < ymax - ymin; y++) {
+		for (int y = 0; y < ymax - ymin + 1; y++) {
 			tab[x][y] = -1;
 		}
 	}
 
 	for (int i = 0; i < pts.size(); i += 3) {
-		tab[pts[i]][pts[i + 1]] = pts[i + 2];
+		tab[pts[i] - xmin][pts[i + 1] - ymin] = pts[i + 2];
 	}
-	// std::cout << xmin << " " << xmax << " " << ymin << " " << ymax << std::endl;
+	std::cout << "min/max: " << xmin << " " << xmax << " " << ymin << " " << ymax << std::endl;
 	return tab;
 }
 
@@ -82,9 +84,17 @@ int			main(int ac, char *av[]) {
 		return -1;
 	}
 	else {
+		int		sizeX, sizeY = 0;
 		std::vector<int> pts = parse(std::string(av[1]));
-		int		**tab = create_tab(pts);
+		int		**tab = create_tab(pts, sizeX, sizeY);
 
+		for (int x = 0; x < sizeX; x++) {
+			for (int y = 0; y < sizeY; y++) {
+				std::cout << tab[x][y] << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << "sizeX = " << sizeX << ", sizeY = " << sizeY << std::endl;
 	}
 
 	// /* Create a windowed mode window and its OpenGL context */
