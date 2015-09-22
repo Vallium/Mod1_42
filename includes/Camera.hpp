@@ -20,7 +20,7 @@
 # include <vector>
 // # include <SOIL/SOIL.h>
 
-# include <glew.h>
+# include <GL/glew.h>
 
 # define CAMERA_SPEED 20
 
