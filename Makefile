@@ -65,6 +65,7 @@ init:
 	make -C glfw
 	cd glm ; cmake .
 	make -C glm
+	make -C glew
 
 clean:
 	rm -f $(OBJ) $(OBJ_DEBUG) $(DEPS)
