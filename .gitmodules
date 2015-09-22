@@ -4,3 +4,6 @@
 [submodule "glm"]
 	path = glm
 	url = git@github.com:g-truc/glm.git
+[submodule "glew"]
+	path = glew
+	url = git@github.com:Vallium/glew.git
