@@ -72,6 +72,30 @@ int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
 	return tab;
 }
 
+void		extrapolate(int **tab, int sizeX, int sizeY) {
+	bool c = true;
+
+	while (c) {
+		c = false;
+		for (int x = 0; x < sizeX; x++) {
+			for (int y = 0; y < sizeY; y++) {
+				if (tab[x][y] == -1) {
+					if (x - 1 > 0 and tab[x-1][y] != -1)
+						tab[x][y] = tab[x-1][y];
+					else if (x + 1 < sizeX and tab[x+1][y] != -1)
+						tab[x][y] = tab[x+1][y];
+					else if (y - 1 > 0 and tab[x][y-1] != -1)
+						tab[x][y] = tab[x][y-1];
+					else if (y + 1 < sizeY and tab[x][y+1] != -1)
+						tab[x][y] = tab[x][y+1];
+					else
+						c = true;
+				}
+			}
+		}
+	}
+}
+
 int			main(int ac, char *av[]) {
 	GLFWwindow	*window;
 
@@ -87,6 +111,8 @@ int			main(int ac, char *av[]) {
 		int		sizeX, sizeY = 0;
 		std::vector<int> pts = parse(std::string(av[1]));
 		int		**tab = create_tab(pts, sizeX, sizeY);
+
+		extrapolate(tab, sizeX, sizeY);
 
 		for (int x = 0; x < sizeX; x++) {
 			for (int y = 0; y < sizeY; y++) {
