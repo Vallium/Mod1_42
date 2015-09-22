@@ -18,7 +18,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
-#include <GL/glew.h>
+// #include <GL/glew.h>
 
 Camera::Camera(glm::vec3 p)
 {

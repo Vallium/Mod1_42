@@ -15,11 +15,12 @@
 
 # define GLM_FORCE_RADIANS
 # include <glm/glm.hpp>
+# include <glm/gtc/matrix_transform.hpp>
 # include <string>
 # include <vector>
-# include <SOIL/SOIL.h>
+// # include <SOIL/SOIL.h>
 
-# include <GL/glew.h>
+# include <glew.h>
 
 # define CAMERA_SPEED 20
 
@@ -39,8 +40,8 @@ public:
 
 	Camera(glm::vec3 p);
 
-	void	ProcessKeyboard(enum Direction dir, GLfloat dt);
-	void	ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
+	void		ProcessKeyboard(enum Direction dir, GLfloat dt);
+	void		ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset);
 	glm::mat4	GetViewMatrix();
 };
 

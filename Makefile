@@ -13,17 +13,18 @@
 NAME		= mod1
 NAME_DEBUG	= mod1_debug
 
-SRC			= main.cpp
+SRC			=	main.cpp		\
+				Camera.cpp
 
-HEAD_DIR	= include
+HEAD_DIR	= includes
 SRC_DIR		= src
 DEBUG_DIR	= debug
 STATIC_DIR	= static
 DEP_DIR		= dep
 
 
-INCLUDES	= -I glfw/include
-LIBS		= -Lglfw/src -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+INCLUDES	= -I glfw/include -I glm/
+LIBS		= -Lglfw/src -Lglm/lib -lglfw3 -lglm -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 OBJ			= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG	= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
@@ -62,6 +63,8 @@ init:
 	git submodule update
 	cd glfw ; cmake .
 	make -C glfw
+	cd glm ; cmake .
+	make -C glm
 
 clean:
 	rm -f $(OBJ) $(OBJ_DEBUG) $(DEPS)
