@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Mesh.hpp"
+#include <iostream>
 
 Mesh::Mesh() {
 	glGenVertexArrays(1, &(_VAO));
@@ -35,12 +36,17 @@ Mesh::Mesh() {
 
 void	Mesh::setVertices(std::vector<GLfloat> vert) {
 	_vertices = vert;
+	glBindVertexArray((_VAO));
+	glBindBuffer(GL_ARRAY_BUFFER, (_VBO));
+	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(GLfloat), &(_vertices[0]), GL_STATIC_DRAW);
+	glBindVertexArray(0);
 }
 
 void	Mesh::render(Renderer *renderer) {
 	renderer->getLandShader()->Use();
 
 	glm::mat4 model;
+
 	model = glm::translate(model, _pos);
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 

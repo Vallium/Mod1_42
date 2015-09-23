@@ -221,10 +221,15 @@ static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 
 	for (int y = 0; y < sizeY-1; y++) {
 		int x;
-		for (x = 0; x < sizeX; x++) {
+		for (x = 0; x < sizeX-1; x++) {
 			float	xf = (float)x;
 			float	yf = (float)y;
-			multipush(vertices, {xf, yf, static_cast<float>(map[x][y]), 1.0, 1.0, 1.0, xf, yf + 1.0f, static_cast<float>(map[x][y + 1]), 1.0, 1.0, 1.0});
+			multipush(vertices, {	xf, yf, static_cast<float>(map[x][y]), 0.5f, 0.0f, 1.0f,
+									xf, yf + 1.0f, static_cast<float>(map[x][y + 1]), 0.5f, 0.0f, 1.0f,
+									xf + 1.0f, yf, static_cast<float>(map[x + 1][y]), 0.5f, 0.0f, 1.0f,
+									xf + 1.0f, yf + 1.0f, static_cast<float>(map[x + 1][y + 1]), 0.5f, 0.0f, 1.0f,
+									xf, yf + 1.0f, static_cast<float>(map[x][y + 1]), 0.5f, 0.0f, 1.0f,
+									xf + 1.0f, yf, static_cast<float>(map[x + 1][y]), 0.5f, 0.0f, 1.0f});
 		}
 	}
 	return vertices;
@@ -233,6 +238,12 @@ static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(0.0, 0.0, 0.0));
 	landMesh = new Mesh();
+
+	std::vector<GLfloat>	test = generateMesh(map, sizeX, sizeY);
+
+	for (auto it = test.begin(); it != test.end(); ++it)
+		std::cout << *it << std::endl;
+
 	landMesh->setVertices(generateMesh(map, sizeX, sizeY));
 }
 
@@ -273,7 +284,7 @@ void	Context::draw() {
 
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-	// world->render(player->_pos, renderer);
+	landMesh->render(renderer);
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
