@@ -82,37 +82,66 @@ std::vector<int>		parse(std::string name) {
 	return out;
 }
 
+static int		pgcd(int a, int b) {
+	if (a == 0)
+		return b;
+	if (b == 0)
+		return a;
+	if (a % 2 == 0 and b % 2 == 0)
+		return 2 * pgcd(a / 2, b / 2);
+	if (a % 2 == 0)
+		return pgcd(a / 2, b);
+	if (b % 2 == 0)
+		return pgcd(a, b / 2);
+	if (a > b)
+		return pgcd(a - b, b);
+	return pgcd(a, b - a);
+}
+
+static int		ppcm(int a, int b) {
+	return (a * b) / pgcd(a, b);
+}
+
 int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
 	int		**tab = nullptr;
-	int xmin = -1;
-	int xmax = -1;
-	int ymin = -1;
-	int ymax = -1;
+	int xmin = 0;
+	int xmax = 20000;
+	int ymin = 0;
+	int ymax = 20000;
+
+	int		pd = 100;
 
 	for (int i = 0; i < pts.size(); i += 3) {
-		if (xmin == -1 or pts[i] < xmin)
-			xmin = pts[i];
-		if (xmax == -1 or pts[i] > xmax)
-			xmax = pts[i];
-		if (ymin == -1 or pts[i + 1] < ymin)
-			ymin = pts[i + 1];
-		if (ymax == -1 or pts[i + 1] > ymax)
-			ymax = pts[i + 1];
+		pd = pgcd(pd, pts[i]);
+		pd = pgcd(pd, pts[i + 1]);
+		pd = pgcd(pd, pts[i + 2]);
+		// if (xmin == -1 or pts[i] < xmin)
+		// 	xmin = pts[i];
+		// if (xmax == -1 or pts[i] > xmax)
+		// 	xmax = pts[i];
+		// if (ymin == -1 or pts[i + 1] < ymin)
+		// 	ymin = pts[i + 1];
+		// if (ymax == -1 or pts[i + 1] > ymax)
+		// 	ymax = pts[i + 1];
 	}
+	std::cout << "pgcd: " << pd << std::endl;
+	sizeX = (xmax - xmin) / pd + 1;
+	sizeY = (ymax - ymin) / pd + 1;
 
-	sizeX = xmax - xmin + 1;
-	sizeY = ymax - ymin + 1;
+	std::cout << "sizeX: " << sizeX << std::endl;
+	std::cout << "sizeY: " << sizeY << std::endl;
 
-	tab = new int*[xmax - xmin + 1];
-	for (int x = 0; x < xmax - xmin + 1; x++) {
-		tab[x] = new int[ymax - ymin + 1];
-		for (int y = 0; y < ymax - ymin + 1; y++) {
+	tab = new int*[sizeX];
+	for (int x = 0; x < sizeX; x++) {
+		tab[x] = new int[sizeY];
+		for (int y = 0; y < sizeY; y++) {
 			tab[x][y] = -1;
 		}
 	}
+	std::cout << "Ya pas de souci jusque la, c'est apres moi jte le dit\n";
 
 	for (int i = 0; i < pts.size(); i += 3) {
-		tab[pts[i] - xmin][pts[i + 1] - ymin] = pts[i + 2];
+		tab[(pts[i] - xmin) / pd][(pts[i + 1] - ymin) / pd] = pts[i + 2] / pd;
 	}
 	std::cout << "min/max: " << xmin << " " << xmax << " " << ymin << " " << ymax << std::endl;
 	return tab;
