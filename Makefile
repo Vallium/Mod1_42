@@ -18,7 +18,8 @@ SRC			=	main.cpp		\
 				Renderer.cpp	\
 				Mesh.cpp		\
 				Shader.cpp		\
-				Context.cpp
+				Context.cpp		\
+				InputManager.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src

@@ -13,6 +13,8 @@
 #include <vector>
 #include "Camera.hpp"
 #include "Renderer.hpp"
+#include "InputManager.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -32,6 +34,7 @@ int		Context::windowHeight;
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
 Mesh			*Context::landMesh;
+InputManager	*Context::inputManager;
 
 glm::mat4		Context::projection;
 
@@ -184,7 +187,7 @@ void	Context::initGLFW() {
 
 	srand(1234);
 
-	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -196,7 +199,7 @@ void	Context::initOGL() {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
+	// glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
@@ -236,15 +239,22 @@ static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 }
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(0.0, 0.0, 0.0));
+	camera = new Camera(glm::vec3(25.0, 25.0, 25.0));
 	landMesh = new Mesh();
+	inputManager = new InputManager(window, camera);
 
 	std::vector<GLfloat>	test = generateMesh(map, sizeX, sizeY);
 
-	for (auto it = test.begin(); it != test.end(); ++it)
-		std::cout << *it << std::endl;
+	// for (auto it = test.begin(); it != test.end(); ++it)
+	// 	std::cout << *it << std::endl;
 
 	landMesh->setVertices(generateMesh(map, sizeX, sizeY));
+
+	// std::vector<GLfloat>	test2;
+	// multipush(test2, {	-1000.0f, 1000.0f, -100.0f, 1.0f, 1.0f, 1.0f,
+	// 						1000.0f, 1000.0f, -100.0f, 1.0f, 1.0f, 1.0f,
+	// 						1000.0f, -1000.0f, -100.0f, 1.0f, 1.0f, 1.0f});
+	// landMesh->setVertices(test2);
 }
 
 void	Context::initProjection() {
@@ -271,14 +281,14 @@ void	Context::update() {
 	lastFrame = currentFrame;
 
 	glfwPollEvents();
-	// inputManager->update(deltaTime);
+	inputManager->update(deltaTime);
 	// world->update(deltaTime);
 }
 
 void	Context::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 view = glm::lookAt(camera->_pos, camera->_pos + camera->_front, camera->_up);
+	glm::mat4 view = camera->GetViewMatrix();
 
 	// skybox->render(player->_camera, projection);
 
@@ -295,7 +305,8 @@ void	Context::deinit() {
 	// delete skybox;
 	// delete world;
 	// delete player;
-	// delete inputManager;
+	delete inputManager;
+	delete landMesh;
 
 	//TODO: Properly de-allocate all resources once they've outlived their purpose
 	glfwTerminate();

@@ -25,7 +25,7 @@ Camera::Camera(glm::vec3 p)
 	_front = glm::vec3(0.0f, 0.0f, -1.0f);
 	_up = glm::vec3(0.0f, 1.0f,  0.0f);
 
-	_yaw = -90.0f;
+	_yaw = 0.0f;
 	_pitch = 0.0f;
 	_zoom = 45.0f;
 

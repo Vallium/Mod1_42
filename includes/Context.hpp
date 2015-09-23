@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "Renderer.hpp"
 #include "Mesh.hpp"
+#include "InputManager.hpp"
 
 namespace Context {
 	extern float	deltaTime;
@@ -33,7 +34,7 @@ namespace Context {
 	// extern Skybox 			*skybox;
 	// extern World	 		*world;
 	extern Camera 			*camera;
-	// extern InputManager 	*inputManager;
+	extern InputManager 	*inputManager;
 
 	extern glm::mat4		projection;
 
