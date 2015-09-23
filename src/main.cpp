@@ -1,10 +1,12 @@
-# define GLEW_STATIC
-#include <GLFW/glfw3.h>
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include <vector>
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "Context.hpp"
 
 std::vector<std::string>		split(std::string str, char delimiter) {
 	std::vector<std::string>		internal;
@@ -98,12 +100,6 @@ void		extrapolate(int **tab, int sizeX, int sizeY) {
 }
 
 int			main(int ac, char *av[]) {
-	GLFWwindow	*window;
-
-	/* Initialize the library */
-	if (!glfwInit())
-		return -1;
-
 	if (ac != 2) {
 		std::cout << "Put a file motherfucker!!" <<std::endl;
 		return -1;
@@ -117,36 +113,20 @@ int			main(int ac, char *av[]) {
 
 		for (int x = 0; x < sizeX; x++) {
 			for (int y = 0; y < sizeY; y++) {
-				std::cout << tab[x][y] << " ";
+				// std::cout << tab[x][y] << " ";
 			}
 			std::cout << std::endl;
 		}
 		std::cout << "sizeX = " << sizeX << ", sizeY = " << sizeY << std::endl;
 	}
+	Context::init();
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-	if (!window)
+	while(!Context::shouldClose())
 	{
-		glfwTerminate();
-		return -1;
+		Context::update();
+		Context::draw();
 	}
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
-
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
-	{
-		/* Render here */
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
-
-		/* Poll for and process events */
-		glfwPollEvents();
-	}
-
-	glfwTerminate();
+	Context::deinit();
 	return 0;
 }

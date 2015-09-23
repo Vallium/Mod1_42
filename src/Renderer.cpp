@@ -12,6 +12,13 @@
 
 #include "Renderer.hpp"
 
+Renderer::Renderer() {
+}
+
+Renderer::~Renderer() {
+}
+
+
 Shader		*Renderer::getLandShader(void) {
 	return _landShader;
 }

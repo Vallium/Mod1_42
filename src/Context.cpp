@@ -10,12 +10,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <SOIL/SOIL.h>
-
 #include <vector>
 #include "Camera.hpp"
 #include "Renderer.hpp"
-
+#include <iostream>
 float	Context::deltaTime = 0.0f;
 float	Context::lastFrame = 0.0f;
 
@@ -25,6 +23,7 @@ int		Context::windowWidth;
 int		Context::windowHeight;
 
 Renderer 		*Context::renderer;
+Camera 			*Context::camera;
 
 glm::mat4		Context::projection;
 
@@ -39,36 +38,36 @@ void    Context::init() {
 
 void	Context::initGLFW()
 {
-	glfwInit();
+	if (!glfwInit())
+		std::cout << "ERROR\n";
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	if (!window)
+	{
+		glfwTerminate();
+		std::cout << "ERROR2\n";
+	}
 
-	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-
-	window = glfwCreateWindow(mode->width, mode->height, "Mod1", monitor, nullptr);
+	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
-	GLuint screenWidth = mode->width, screenHeight = mode->height;
+	GLuint screenWidth = 640, screenHeight = 480;
 
-	windowWidth = mode->width;
-	windowHeight = mode->height;
+	windowWidth = 640;
+	windowHeight = 480;
 
 	srand(1234);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-
 	glViewport(0, 0, screenWidth, screenHeight);
 
 }
@@ -86,11 +85,12 @@ void	Context::initRenderer() {
 
 	renderer = new Renderer();
 
-	renderer->setLandShader(new Shader("shaders/land.vert", "shaders/land.frag"));
+	renderer->loadShaders();
+
 }
 
 void	Context::initWorld() {
-
+	camera = new Camera(glm::vec3(0.0, 0.0, 0.0));
 }
 
 void	Context::initProjection() {
@@ -124,7 +124,7 @@ void	Context::update() {
 void	Context::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 view = glm::lookAt(camera._pos, camera._pos + camera._front, camera._up);
+	glm::mat4 view = glm::lookAt(camera->_pos, camera->_pos + camera->_front, camera->_up);
 
 	// skybox->render(player->_camera, projection);
 

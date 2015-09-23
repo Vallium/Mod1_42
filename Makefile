@@ -17,7 +17,8 @@ SRC			=	main.cpp		\
 				Camera.cpp		\
 				Renderer.cpp	\
 				Mesh.cpp		\
-				Shader.cpp
+				Shader.cpp		\
+				Context.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src

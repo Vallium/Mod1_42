@@ -19,10 +19,10 @@ class	Renderer {
 private:
 	Shader		*_landShader;
 
+public:
 	Renderer();
 	~Renderer();
 
-public:
 	Shader		*getLandShader(void);
 	void		loadShaders(void);
 };

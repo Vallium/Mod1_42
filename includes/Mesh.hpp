@@ -38,7 +38,8 @@ private:
 public:
 	Mesh();
 
-	void	generate(int **map, int sizeX, int sizeY);
+	// void	generate(int **map, int sizeX, int sizeY);
+	void	setVertice(std::vector<GLfloat> vert);
 	void	render(Renderer *renderer);
 };
 

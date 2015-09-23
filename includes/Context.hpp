@@ -10,8 +10,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <SOIL/SOIL.h>
-
 #include <vector>
 #include "Camera.hpp"
 #include "Renderer.hpp"
