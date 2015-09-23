@@ -84,7 +84,10 @@ std::vector<int>		parse(std::string name) {
 
 int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
 	int		**tab = nullptr;
-	int xmin, xmax, ymin, ymax = -1;
+	int xmin = -1;
+	int xmax = -1;
+	int ymin = -1;
+	int ymax = -1;
 
 	for (int i = 0; i < pts.size(); i += 3) {
 		if (xmin == -1 or pts[i] < xmin)
@@ -118,25 +121,26 @@ int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
 void		extrapolate(int **tab, int sizeX, int sizeY) {
 	bool c = true;
 
-	while (c) {
-		c = false;
-		for (int x = 0; x < sizeX; x++) {
-			for (int y = 0; y < sizeY; y++) {
-				if (tab[x][y] == -1) {
-					if (x - 1 > 0 and tab[x-1][y] != -1)
-						tab[x][y] = tab[x-1][y];
-					else if (x + 1 < sizeX and tab[x+1][y] != -1)
-						tab[x][y] = tab[x+1][y];
-					else if (y - 1 > 0 and tab[x][y-1] != -1)
-						tab[x][y] = tab[x][y-1];
-					else if (y + 1 < sizeY and tab[x][y+1] != -1)
-						tab[x][y] = tab[x][y+1];
-					else
-						c = true;
-				}
-			}
-		}
-	}
+	// while (c) {
+	// 	std::cout << "A";
+	// 	c = false;
+	// 	for (int x = 0; x < sizeX; x++) {
+	// 		for (int y = 0; y < sizeY; y++) {
+	// 			if (tab[x][y] == -1) {
+	// 				if (x - 1 > 0 and tab[x-1][y] != -1)
+	// 					tab[x][y] = tab[x-1][y];
+	// 				else if (x + 1 < sizeX and tab[x+1][y] != -1)
+	// 					tab[x][y] = tab[x+1][y];
+	// 				else if (y - 1 > 0 and tab[x][y-1] != -1)
+	// 					tab[x][y] = tab[x][y-1];
+	// 				else if (y + 1 < sizeY and tab[x][y+1] != -1)
+	// 					tab[x][y] = tab[x][y+1];
+	// 				else
+	// 					c = true;
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 void	Context::initMap(int ac, char **av) {
@@ -219,6 +223,16 @@ static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
 	}
 }
 
+static void addVertex(std::vector<GLfloat> &vertices, float x, float y, float z)
+{
+	vertices.push_back(x);
+	vertices.push_back(y);
+	vertices.push_back(z);
+	vertices.push_back(1.0f * y / 10);
+	vertices.push_back(1.0f - y / 10);
+	vertices.push_back(1.0f);
+}
+
 static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 	std::vector<GLfloat>	vertices;
 
@@ -227,19 +241,19 @@ static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 		for (x = 0; x < sizeX-1; x++) {
 			float	xf = (float)x;
 			float	yf = (float)y;
-			multipush(vertices, {	xf, yf, static_cast<float>(map[x][y]), 0.5f, 0.0f, 1.0f,
-									xf, yf + 1.0f, static_cast<float>(map[x][y + 1]), 0.5f, 0.0f, 1.0f,
-									xf + 1.0f, yf, static_cast<float>(map[x + 1][y]), 0.5f, 0.0f, 1.0f,
-									xf + 1.0f, yf + 1.0f, static_cast<float>(map[x + 1][y + 1]), 0.5f, 0.0f, 1.0f,
-									xf, yf + 1.0f, static_cast<float>(map[x][y + 1]), 0.5f, 0.0f, 1.0f,
-									xf + 1.0f, yf, static_cast<float>(map[x + 1][y]), 0.5f, 0.0f, 1.0f});
+			addVertex(vertices, xf, static_cast<float>(map[x][y]), yf);
+			addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
+			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
+			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y + 1]), yf + 1.0f);
+			addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
+			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
 		}
 	}
 	return vertices;
 }
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(25.0, 25.0, 25.0));
+	camera = new Camera(glm::vec3(0.0f, 25.0f, 0.0f));
 	landMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 
@@ -249,12 +263,6 @@ void	Context::initWorld() {
 	// 	std::cout << *it << std::endl;
 
 	landMesh->setVertices(generateMesh(map, sizeX, sizeY));
-
-	// std::vector<GLfloat>	test2;
-	// multipush(test2, {	-1000.0f, 1000.0f, -100.0f, 1.0f, 1.0f, 1.0f,
-	// 						1000.0f, 1000.0f, -100.0f, 1.0f, 1.0f, 1.0f,
-	// 						1000.0f, -1000.0f, -100.0f, 1.0f, 1.0f, 1.0f});
-	// landMesh->setVertices(test2);
 }
 
 void	Context::initProjection() {
