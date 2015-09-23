@@ -239,14 +239,56 @@ static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
 	for (int y = 0; y < sizeY-1; y++) {
 		int x;
 		for (x = 0; x < sizeX-1; x++) {
-			float	xf = (float)x;
-			float	yf = (float)y;
-			addVertex(vertices, xf, static_cast<float>(map[x][y]), yf);
-			addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
-			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
-			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y + 1]), yf + 1.0f);
-			addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
-			addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
+			// float	xf = (float)x;
+			// float	yf = (float)y;
+			// addVertex(vertices, xf, static_cast<float>(map[x][y]), yf);
+			vertices.push_back(static_cast<float>(x));
+			vertices.push_back(static_cast<float>(map[x][y]));
+			vertices.push_back(static_cast<float>(y));
+			vertices.push_back(static_cast<float>(x % 2));
+			vertices.push_back(static_cast<float>(y % 4));
+			vertices.push_back(static_cast<float>((x * y) % 8));
+
+			// addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
+			vertices.push_back(static_cast<float>(x));
+			vertices.push_back(static_cast<float>(map[x][y + 1]));
+			vertices.push_back(static_cast<float>(y + 1));
+			vertices.push_back(static_cast<float>(x % 2));
+			vertices.push_back(static_cast<float>((y + 1) % 4));
+			vertices.push_back(static_cast<float>((x * (y + 1)) % 8));
+
+			// addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
+			vertices.push_back(static_cast<float>(x + 1));
+			vertices.push_back(static_cast<float>(map[x + 1][y]));
+			vertices.push_back(static_cast<float>(y));
+			vertices.push_back(static_cast<float>((x + 1) % 2));
+			vertices.push_back(static_cast<float>(y % 4));
+			vertices.push_back(static_cast<float>(((x + 1) * y) % 8));
+
+			// addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y + 1]), yf + 1.0f);
+			vertices.push_back(static_cast<float>(x + 1));
+			vertices.push_back(static_cast<float>(map[x + 1][y + 1]));
+			vertices.push_back(static_cast<float>(y + 1));
+			vertices.push_back(static_cast<float>((x + 1) % 2));
+			vertices.push_back(static_cast<float>((y + 1) % 4));
+			vertices.push_back(static_cast<float>(((x + 1) * (y + 1)) % 8));
+
+			// addVertex(vertices, xf, static_cast<float>(map[x][y + 1]), yf + 1.0f);
+			vertices.push_back(static_cast<float>(x));
+			vertices.push_back(static_cast<float>(map[x][y + 1]));
+			vertices.push_back(static_cast<float>(y + 1));
+			vertices.push_back(static_cast<float>(x % 2));
+			vertices.push_back(static_cast<float>((y + 1) % 4));
+			vertices.push_back(static_cast<float>((x * (y + 1)) % 8));
+
+			// addVertex(vertices, xf + 1.0f, static_cast<float>(map[x + 1][y]), yf);
+			vertices.push_back(static_cast<float>(x + 1));
+			vertices.push_back(static_cast<float>(map[x + 1][y]));
+			vertices.push_back(static_cast<float>(y));
+			vertices.push_back(static_cast<float>((x + 1) % 2));
+			vertices.push_back(static_cast<float>(y % 4));
+			vertices.push_back(static_cast<float>(((x + 1) * y) % 8));
+
 		}
 	}
 	return vertices;
