@@ -14,7 +14,10 @@ NAME		= mod1
 NAME_DEBUG	= mod1_debug
 
 SRC			=	main.cpp		\
-				Camera.cpp
+				Camera.cpp		\
+				Renderer.cpp	\
+				Mesh.cpp		\
+				Shader.cpp		
 
 HEAD_DIR	= includes
 SRC_DIR		= src
@@ -24,7 +27,7 @@ DEP_DIR		= dep
 
 
 INCLUDES	= -I glfw/include -I glm/ -I glew/include
-LIBS		= -Lglfw/src -Lglm/lib -Lglew/lib -lglfw3 -lglm -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 OBJ			= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG	= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))

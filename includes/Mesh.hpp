@@ -29,15 +29,16 @@
 
 class		Mesh {
 private:
-	GLuint	_VAO;
-	GLuint	_VBO;
+	GLuint		_VAO;
+	GLuint		_VBO;
+	glm::vec3	_pos;
 
 	std::vector<GLfloat>	_vertices;
 
 public:
 	Mesh();
 
-	void	generate(int **map);
+	void	generate(int **map, int sizeX, int sizeY);
 	void	render(Renderer *renderer);
 };
 

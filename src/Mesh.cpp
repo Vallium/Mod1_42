@@ -41,12 +41,12 @@ Mesh::Mesh() {
 }
 
 void	Mesh::generate(int **map, int sizeX, int sizeY) {
-	for (int y = 0; y < sizeY; y++) {
-		int x;
+	for (float y = 0; y < sizeY; y++) {
+		float x;
 		for (x = 0; x < sizeX; x++) {
-			multipush(_vertices, {x, y, map[x][y], x, y + 1, map[x][y + 1]});
+			multipush(_vertices, {x, y, static_cast<float>(map[(int)x][(int)y]), x, y + 1, static_cast<float>(map[(int)x][(int)y + 1])});
 		}
-		multipush(_vertices, {x, y, map[x - 1][y], x, y + 1, map[x - 1][y + 1]});
+		multipush(_vertices, {x, y, static_cast<float>(map[(int)x - 1][(int)y]), x, y + 1, static_cast<float>(map[(int)x - 1][(int)y + 1])});
 	}
 }
 
@@ -54,8 +54,8 @@ void	Mesh::render(Renderer *renderer) {
 	renderer->getLandShader()->Use();
 
 	glm::mat4 model;
-	model = glm::translate(model, glm::vec3(0, 0, 0));
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+	model = glm::translate(model, _pos);
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
 	glBindVertexArray(_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 6);
