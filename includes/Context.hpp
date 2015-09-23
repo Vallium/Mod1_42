@@ -13,17 +13,23 @@
 #include <vector>
 #include "Camera.hpp"
 #include "Renderer.hpp"
+#include "Mesh.hpp"
 
 namespace Context {
 	extern float	deltaTime;
 	extern float	lastFrame;
 
-	extern GLFWwindow* window;
+	extern int		sizeX;
+	extern int		sizeY;
+	extern int		**map;
+
+	extern GLFWwindow	*window;
 
 	extern int		windowWidth;
 	extern int		windowHeight;
 
 	extern Renderer 		*renderer;
+	extern Mesh				*landMesh;
 	// extern Skybox 			*skybox;
 	// extern World	 		*world;
 	extern Camera 			*camera;
@@ -31,16 +37,17 @@ namespace Context {
 
 	extern glm::mat4		projection;
 
-	extern bool    shouldClose();
+	extern bool		shouldClose();
 
-	extern void    init();
-	extern void    initGLFW();
-	extern void    initOGL();
-	extern void    initRenderer();
-	extern void    initWorld();
-	extern void    initProjection();
-	extern void    initTextures();
-	extern void    update();
-	extern void    draw();
-	extern void    deinit();
+	extern void		init(int ac, char **av);
+	extern void		initMap(int ac, char **av);
+	extern void		initGLFW();
+	extern void		initOGL();
+	extern void		initRenderer();
+	extern void		initWorld();
+	extern void		initProjection();
+	extern void		initTextures();
+	extern void		update();
+	extern void		draw();
+	extern void		deinit();
 }

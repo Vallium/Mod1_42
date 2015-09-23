@@ -12,13 +12,6 @@
 
 #include "Mesh.hpp"
 
-static void multipush(std::vector<GLfloat> &target, std::vector<GLfloat> src)
-{
-	for (std::vector<GLfloat>::iterator it = src.begin(); it < src.end(); ++it) {
-		target.push_back(*it);
-	}
-}
-
 Mesh::Mesh() {
 	glGenVertexArrays(1, &(_VAO));
 	glGenBuffers(1, &(_VBO));
@@ -40,14 +33,8 @@ Mesh::Mesh() {
 	_pos = glm::vec3(0,0,0);
 }
 
-void	Mesh::generate(int **map, int sizeX, int sizeY) {
-	for (float y = 0; y < sizeY; y++) {
-		float x;
-		for (x = 0; x < sizeX; x++) {
-			multipush(_vertices, {x, y, static_cast<float>(map[(int)x][(int)y]), x, y + 1, static_cast<float>(map[(int)x][(int)y + 1])});
-		}
-		multipush(_vertices, {x, y, static_cast<float>(map[(int)x - 1][(int)y]), x, y + 1, static_cast<float>(map[(int)x - 1][(int)y + 1])});
-	}
+void	Mesh::setVertices(std::vector<GLfloat> vert) {
+	_vertices = vert;
 }
 
 void	Mesh::render(Renderer *renderer) {
