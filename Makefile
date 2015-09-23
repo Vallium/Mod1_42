@@ -17,7 +17,7 @@ SRC			=	main.cpp		\
 				Camera.cpp		\
 				Renderer.cpp	\
 				Mesh.cpp		\
-				Shader.cpp		
+				Shader.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src
@@ -27,7 +27,7 @@ DEP_DIR		= dep
 
 
 INCLUDES	= -I glfw/include -I glm/ -I glew/include
-LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -ldl
 
 OBJ			= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG	= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
@@ -39,7 +39,6 @@ DEPENDS 	= -MT $@ -MD -MP -MF $(subst .o,.d,$@)
 
 
 $(shell mkdir -p $(STATIC_DIR) $(DEBUG_DIR) $(DEP_DIR))
-
 
 .PHONY: clean fclean re debug init
 

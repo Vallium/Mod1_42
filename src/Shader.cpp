@@ -17,6 +17,7 @@
 #include <sstream>
 #include <iostream>
 
+#define GLEW_STATIC
 #include <GL/glew.h>
 
 // Constructor generates the shader on the fly

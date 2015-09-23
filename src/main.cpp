@@ -1,3 +1,4 @@
+# define GLEW_STATIC
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <string>
@@ -100,8 +101,8 @@ int			main(int ac, char *av[]) {
 	GLFWwindow	*window;
 
 	/* Initialize the library */
-	// if (!glfwInit())
-	// 	return -1;
+	if (!glfwInit())
+		return -1;
 
 	if (ac != 2) {
 		std::cout << "Put a file motherfucker!!" <<std::endl;
