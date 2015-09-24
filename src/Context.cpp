@@ -27,8 +27,8 @@ float	**Context::map;
 
 GLFWwindow* Context::window;
 
-int		Context::windowWidth;
-int		Context::windowHeight;
+int		Context::windowWidth = 640;
+int		Context::windowHeight = 480;
 
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
@@ -44,7 +44,6 @@ void    Context::init(int ac, char **av) {
 	initRenderer();
 	initWorld();
 	initProjection();
-	// initTextures();
 }
 
 std::vector<std::string>		split(std::string str, char delimiter) {
@@ -71,7 +70,6 @@ std::vector<int>		parse(std::string name) {
 
 			std::vector<std::string> coords = split(tmp, ',');
 
-			// std::cout << coords[0] << " " << coords[1] << " " << coords[2] << std::endl;
 			out.push_back(stoi(coords[0]));
 			out.push_back(stoi(coords[1]));
 			out.push_back(stoi(coords[2]));
@@ -194,13 +192,7 @@ void	Context::initGLFW() {
 		std::cout << "ERROR2\n";
 	}
 
-	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
-
-	GLuint screenWidth = 640, screenHeight = 480;
-
-	windowWidth = 640;
-	windowHeight = 480;
 
 	srand(1234);
 
@@ -208,7 +200,7 @@ void	Context::initGLFW() {
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-	glViewport(0, 0, screenWidth, screenHeight);
+	glViewport(0, 0, windowWidth, windowHeight);
 
 }
 
@@ -316,11 +308,6 @@ void	Context::initWorld() {
 	landMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 
-	std::vector<GLfloat>	test = generateMesh(map, size);
-
-	// for (auto it = test.begin(); it != test.end(); ++it)
-	// 	std::cout << *it << std::endl;
-
 	landMesh->setVertices(generateMesh(map, size));
 }
 
@@ -330,13 +317,6 @@ void	Context::initProjection() {
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
-// void	Context::initTextures() {
-// 	renderer->getBlockShader()->Use();
-// 	glActiveTexture(GL_TEXTURE0);
-// 	glBindTexture(GL_TEXTURE_2D_ARRAY, renderer->getTextureManager()->getTileset());
-// 	glUniform1i(glGetUniformLocation(renderer->getBlockShader()->getProgram(), "ourTexture"), 0);
-//
-// }
 
 bool    Context::shouldClose() {
 	return glfwWindowShouldClose(window);
@@ -357,11 +337,9 @@ void	Context::draw() {
 
 	glm::mat4 view = camera->GetViewMatrix();
 
-	// skybox->render(player->_camera, projection);
-
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-	landMesh->render(renderer);
+	landMesh->render(renderer->getLandShader());
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
@@ -369,9 +347,6 @@ void	Context::draw() {
 
 void	Context::deinit() {
 	delete renderer;
-	// delete skybox;
-	// delete world;
-	// delete player;
 	delete inputManager;
 	delete landMesh;
 

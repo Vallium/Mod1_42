@@ -31,6 +31,7 @@ class		Mesh {
 private:
 	GLuint		_VAO;
 	GLuint		_VBO;
+	GLuint		_instancedVBO;
 	glm::vec3	_pos;
 
 	std::vector<GLfloat>	_vertices;
@@ -40,7 +41,9 @@ public:
 
 	// void	generate(int **map, int sizeX, int sizeY);
 	void	setVertices(std::vector<GLfloat> vert);
-	void	render(Renderer *renderer);
+	void	setInstances(std::vector<GLfloat> vert);
+	void	render(Shader *shader);
+	void	render(Shader *shader, unsigned int instances);
 };
 
 #endif
