@@ -16,6 +16,7 @@
 Mesh::Mesh() {
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
+	glGenBuffers(1, &_instancedVBO);
 
 	glBindVertexArray(_VAO);
 
@@ -26,16 +27,15 @@ Mesh::Mesh() {
 	glEnableVertexAttribArray(0);
 
 	// TexCoord attribute
-	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, _instancedVBO);
 
 	// Instanced Position attribute
-	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glVertexAttribDivisor(3, 1);
+	glEnableVertexAttribArray(3);
 
 	glBindVertexArray(0);
 
