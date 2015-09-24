@@ -102,7 +102,7 @@ static int		ppcm(int a, int b) {
 }
 
 #define BASE_SIZE 20000
-#define MIN_TAB_SIZE 100
+#define MIN_TAB_SIZE 500
 
 float		**create_tab(std::vector<int> &pts, int &size) {
 	float	**tab = nullptr;
@@ -139,7 +139,7 @@ void 	hill( float **map, int size, int x, int y, int zin ) {
 	float z = zin;
 	int rayon = 1;
 
-	while (rayon < 25.0f) {
+	while (rayon < static_cast<float>(size / 4)) {
 		int ix = x - rayon;
 		while (ix < x + rayon) {
 			int iy = y - rayon;
@@ -153,7 +153,7 @@ void 	hill( float **map, int size, int x, int y, int zin ) {
 			ix++;
 		}
 		rayon++;
-		z -= static_cast<float>(zin) / 25.0f;
+		z -= static_cast<float>(zin) / static_cast<float>(size / 4);
 	}
 }
 
