@@ -22,9 +22,8 @@
 float	Context::deltaTime = 0.0f;
 float	Context::lastFrame = 0.0f;
 
-int		Context::sizeX = 0;
-int		Context::sizeY = 0;
-int		**Context::map;
+int		Context::size = 0;
+float	**Context::map;
 
 GLFWwindow* Context::window;
 
@@ -102,74 +101,67 @@ static int		ppcm(int a, int b) {
 	return (a * b) / pgcd(a, b);
 }
 
-int			**create_tab(std::vector<int> pts, int &sizeX, int &sizeY) {
-	int		**tab = nullptr;
-	int xmin = 0;
-	int xmax = 20000;
-	int ymin = 0;
-	int ymax = 20000;
+#define BASE_SIZE 20000
+#define MIN_TAB_SIZE 100
 
-	int		pd = 100;
+float		**create_tab(std::vector<int> &pts, int &size) {
+	float	**tab = nullptr;
+
+	int		pd = pts[0];
 
 	for (int i = 0; i < pts.size(); i += 3) {
 		pd = pgcd(pd, pts[i]);
 		pd = pgcd(pd, pts[i + 1]);
 		pd = pgcd(pd, pts[i + 2]);
-		// if (xmin == -1 or pts[i] < xmin)
-		// 	xmin = pts[i];
-		// if (xmax == -1 or pts[i] > xmax)
-		// 	xmax = pts[i];
-		// if (ymin == -1 or pts[i + 1] < ymin)
-		// 	ymin = pts[i + 1];
-		// if (ymax == -1 or pts[i + 1] > ymax)
-		// 	ymax = pts[i + 1];
 	}
 	std::cout << "pgcd: " << pd << std::endl;
-	sizeX = (xmax - xmin) / pd + 1;
-	sizeY = (ymax - ymin) / pd + 1;
+	size = ppcm(BASE_SIZE / pd, MIN_TAB_SIZE);
 
-	std::cout << "sizeX: " << sizeX << std::endl;
-	std::cout << "sizeY: " << sizeY << std::endl;
+	std::cout << "size: " << size << std::endl;
 
-	tab = new int*[sizeX];
-	for (int x = 0; x < sizeX; x++) {
-		tab[x] = new int[sizeY];
-		for (int y = 0; y < sizeY; y++) {
-			tab[x][y] = -1;
+	tab = new float*[size];
+	for (int x = 0; x < size; x++) {
+		tab[x] = new float[size];
+		for (int y = 0; y < size; y++) {
+			tab[x][y] = 0.0f;
 		}
 	}
-	std::cout << "Ya pas de souci jusque la, c'est apres moi jte le dit\n";
 
 	for (int i = 0; i < pts.size(); i += 3) {
-		tab[(pts[i] - xmin) / pd][(pts[i + 1] - ymin) / pd] = pts[i + 2] / pd;
+		pts[i] = pts[i] * size / BASE_SIZE;
+		pts[i + 1] = pts[i + 1] * size / BASE_SIZE;
+		pts[i + 2] = pts[i + 2] * size / BASE_SIZE;
 	}
-	std::cout << "min/max: " << xmin << " " << xmax << " " << ymin << " " << ymax << std::endl;
 	return tab;
 }
 
-void		extrapolate(int **tab, int sizeX, int sizeY) {
-	bool c = true;
+void 	hill( float **map, int size, int x, int y, int zin ) {
+	float z = zin;
+	int rayon = 0;
 
-	// while (c) {
-	// 	std::cout << "A";
-	// 	c = false;
-	// 	for (int x = 0; x < sizeX; x++) {
-	// 		for (int y = 0; y < sizeY; y++) {
-	// 			if (tab[x][y] == -1) {
-	// 				if (x - 1 > 0 and tab[x-1][y] != -1)
-	// 					tab[x][y] = tab[x-1][y];
-	// 				else if (x + 1 < sizeX and tab[x+1][y] != -1)
-	// 					tab[x][y] = tab[x+1][y];
-	// 				else if (y - 1 > 0 and tab[x][y-1] != -1)
-	// 					tab[x][y] = tab[x][y-1];
-	// 				else if (y + 1 < sizeY and tab[x][y+1] != -1)
-	// 					tab[x][y] = tab[x][y+1];
-	// 				else
-	// 					c = true;
-	// 			}
-	// 		}
-	// 	}
-	// }
+	while (rayon < size / 20) {
+		int ix = x - rayon;
+		while (ix < x + rayon) {
+			int iy = y - rayon;
+			while (iy < y + rayon) {
+				if ( ix >= 0 and iy > 0 and ix < size and iy < size
+					and (ix - x)*(ix - x) + (iy - y)*(iy - y) < (rayon*rayon)
+					and map[ix][iy] < z)
+					map[ix][iy] = z;
+				iy++;
+			}
+			ix++;
+		}
+		rayon++;
+		z -= 0.5f;
+	}
+}
+
+
+void		errect_hills(float **tab, int size, std::vector<int> pts) {
+	for (int i = 0; i < pts.size(); i += 3) {
+		hill(tab, size, pts[i], pts[i + 1], pts[i + 2]);
+	}
 }
 
 void	Context::initMap(int ac, char **av) {
@@ -179,17 +171,9 @@ void	Context::initMap(int ac, char **av) {
 	}
 	else {
 		std::vector<int> pts = parse(std::string(av[1]));
-		map = create_tab(pts, sizeX, sizeY);
+		map = create_tab(pts, size);
 
-		extrapolate(map, sizeX, sizeY);
-
-		for (int x = 0; x < sizeX; x++) {
-			for (int y = 0; y < sizeY; y++) {
-				// std::cout << tab[x][y] << " ";
-			}
-			// std::cout << std::endl;
-		}
-		std::cout << "sizeX = " << sizeX << ", sizeY = " << sizeY << std::endl;
+		errect_hills(map, size, pts);
 	}
 }
 
@@ -262,12 +246,12 @@ static void addVertex(std::vector<GLfloat> &vertices, float x, float y, float z)
 	vertices.push_back(1.0f);
 }
 
-static std::vector<GLfloat>	generateMesh(int **map, int sizeX, int sizeY) {
+static std::vector<GLfloat>	generateMesh(float **map, int size) {
 	std::vector<GLfloat>	vertices;
 
-	for (int y = 0; y < sizeY-1; y++) {
+	for (int y = 0; y < size-1; y++) {
 		int x;
-		for (x = 0; x < sizeX-1; x++) {
+		for (x = 0; x < size-1; x++) {
 			// float	xf = (float)x;
 			// float	yf = (float)y;
 			// addVertex(vertices, xf, static_cast<float>(map[x][y]), yf);
@@ -328,12 +312,12 @@ void	Context::initWorld() {
 	landMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 
-	std::vector<GLfloat>	test = generateMesh(map, sizeX, sizeY);
+	std::vector<GLfloat>	test = generateMesh(map, size);
 
 	// for (auto it = test.begin(); it != test.end(); ++it)
 	// 	std::cout << *it << std::endl;
 
-	landMesh->setVertices(generateMesh(map, sizeX, sizeY));
+	landMesh->setVertices(generateMesh(map, size));
 }
 
 void	Context::initProjection() {

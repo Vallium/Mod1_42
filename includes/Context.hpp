@@ -20,9 +20,8 @@ namespace Context {
 	extern float	deltaTime;
 	extern float	lastFrame;
 
-	extern int		sizeX;
-	extern int		sizeY;
-	extern int		**map;
+	extern int		size;
+	extern float	**map;
 
 	extern GLFWwindow	*window;
 
