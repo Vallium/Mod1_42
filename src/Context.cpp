@@ -137,9 +137,9 @@ float		**create_tab(std::vector<int> &pts, int &size) {
 
 void 	hill( float **map, int size, int x, int y, int zin ) {
 	float z = zin;
-	int rayon = 0;
+	int rayon = 1;
 
-	while (rayon < size / 20) {
+	while (rayon < 25.0f) {
 		int ix = x - rayon;
 		while (ix < x + rayon) {
 			int iy = y - rayon;
@@ -153,7 +153,7 @@ void 	hill( float **map, int size, int x, int y, int zin ) {
 			ix++;
 		}
 		rayon++;
-		z -= 0.5f;
+		z -= static_cast<float>(zin) / 25.0f;
 	}
 }
 
