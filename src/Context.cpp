@@ -204,7 +204,7 @@ void	Context::initGLFW() {
 
 	srand(1234);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glewExperimental = GL_TRUE;
 	glewInit();
@@ -312,7 +312,7 @@ static std::vector<GLfloat>	generateMesh(float **map, int size) {
 }
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(0.0f, 25.0f, 0.0f));
+	camera = new Camera(glm::vec3(-10.0f, 25.0f, -10.0f));
 	landMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 

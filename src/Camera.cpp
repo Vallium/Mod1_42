@@ -22,7 +22,7 @@
 Camera::Camera(glm::vec3 p)
 {
 	_pos = p;
-	_front = glm::vec3(0.0f, 0.0f, -1.0f);
+	_front = glm::normalize(glm::vec3(10.0f, 5.0f, 10.0f) - _pos);
 	_up = glm::vec3(0.0f, 1.0f,  0.0f);
 
 	_yaw = 0.0f;
@@ -60,6 +60,7 @@ void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 			_speed--;
 			break;
 	}
+	_front = glm::normalize(glm::vec3(10.0f, 5.0f, 10.0f) - _pos);
 }
 
 void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)
