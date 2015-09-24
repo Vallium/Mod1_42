@@ -216,7 +216,7 @@ void	Context::initOGL() {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	// glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
@@ -290,13 +290,6 @@ static std::vector<GLfloat>	generateMesh(float **map, int size) {
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
-			// addVertex(vertices, xf,(map[x][y + 1]), yf + 1.0f);
-			vertices.push_back(xf * ratio);
-			vertices.push_back(map[x][y + 1] * ratio);
-			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / 5.0f);
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
 
 			// addVertex(vertices, xf + 1.0f,(map[x + 1][y]), yf);
 			vertices.push_back((xf + 1.0f) * ratio);
@@ -306,6 +299,13 @@ static std::vector<GLfloat>	generateMesh(float **map, int size) {
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
+			// addVertex(vertices, xf,(map[x][y + 1]), yf + 1.0f);
+			vertices.push_back(xf * ratio);
+			vertices.push_back(map[x][y + 1] * ratio);
+			vertices.push_back((yf + 1.0f) * ratio);
+			vertices.push_back(0.8f * map[x][y] * ratio / 5.0f);
+			vertices.push_back(0.4f);
+			vertices.push_back(0.0f);
 		}
 	}
 	return vertices;
