@@ -19,7 +19,8 @@ SRC			=	main.cpp		\
 				Mesh.cpp		\
 				Shader.cpp		\
 				Context.cpp		\
-				InputManager.cpp
+				InputManager.cpp	\
+				map.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src
