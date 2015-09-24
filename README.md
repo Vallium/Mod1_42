@@ -3,5 +3,5 @@ Mod1
 
 TODO:
 -----
-[ ] Couleur en fonction de la hauteur
-[ ] Mesh de taille fixe
+[X] Couleur en fonction de la hauteur
+[X] Mesh de taille fixe
