@@ -40,6 +40,9 @@ Mesh::Mesh() {
 	glBindVertexArray(0);
 
 	_pos = glm::vec3(0,0,0);
+
+	setVertices({0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
+	setInstances({0.0f, 0.0f, 0.0f});
 }
 
 void	Mesh::setVertices(std::vector<GLfloat> vert) {
