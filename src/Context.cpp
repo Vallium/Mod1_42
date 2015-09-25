@@ -26,8 +26,8 @@ float	**Context::map;
 
 GLFWwindow* Context::window;
 
-int		Context::windowWidth = 640;
-int		Context::windowHeight = 480;
+int		Context::windowWidth = 800;
+int		Context::windowHeight = 600;
 
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
@@ -39,13 +39,13 @@ glm::mat4		Context::projection;
 
 std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
 	int faces = slices * rings;
-	// int nbV = slices * rings;
+	int nbV = slices * rings;
 
 	std::vector<GLfloat>	vertices;
 
 	//Allocation de mémoire
-	// float * v = new float[3 * nbV];
-	// float * n = new float[3 * nbV];
+	float * v = new float[3 * nbV];
+	float * n = new float[3 * nbV];
 	// float * tex = new float[2 * nbV];
 	unsigned int * id = new unsigned int[6 * faces];
 
@@ -62,12 +62,19 @@ std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
 			z = sin( 2 * M_PI * s * S) * sin( M_PI * r * R );
 			y = sin(-M_PI_2 + (M_PI * r * R));
 
-			vertices.push_back(x * radius);
-			vertices.push_back(y * radius);
-			vertices.push_back(z * radius);
-			vertices.push_back(1.0f);
-			vertices.push_back(1.0f);
-			vertices.push_back(1.0f);
+			// vertices.push_back(x * radius);
+			// vertices.push_back(y * radius);
+			// vertices.push_back(z * radius);
+			// vertices.push_back(1.0f);
+			// vertices.push_back(1.0f);
+			// vertices.push_back(1.0f);
+			v[idx] = x * radius;
+			v[idx + 1] = y * radius;
+			v[idx + 2] = z * radius;
+
+			n[idx] = x;
+			n[idx + 1] = y;
+			n[idx + 2] = z;
 
 			idx += 3;
 
@@ -86,11 +93,53 @@ std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
 			nextslice = s+1;
 			// The quad
 			id[idx] = ringStart + s;
+			vertices.push_back(v[(int)(ringStart + s) * 3]);
+			vertices.push_back(v[(int)(ringStart + s) * 3 + 1]);
+			vertices.push_back(v[(int)(ringStart + s) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			id[idx+1] = nextRingStart + s;
+			vertices.push_back(v[(int)(nextRingStart + s) * 3]);
+			vertices.push_back(v[(int)(nextRingStart + s) * 3 + 1]);
+			vertices.push_back(v[(int)(nextRingStart + s) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			id[idx+2] = nextRingStart + nextslice;
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3]);
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3 + 1]);
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			id[idx+3] = ringStart + s;
+			vertices.push_back(v[(int)(ringStart + s) * 3]);
+			vertices.push_back(v[(int)(ringStart + s) * 3 + 1]);
+			vertices.push_back(v[(int)(ringStart + s) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			id[idx+4] = nextRingStart + nextslice;
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3]);
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3 + 1]);
+			vertices.push_back(v[(int)(nextRingStart + nextslice) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			id[idx+5] = ringStart + nextslice;
+			vertices.push_back(v[(int)(ringStart + nextslice) * 3]);
+			vertices.push_back(v[(int)(ringStart + nextslice) * 3 + 1]);
+			vertices.push_back(v[(int)(ringStart + nextslice) * 3 + 2]);
+			vertices.push_back(0.2f);
+			vertices.push_back(0.2f);
+			vertices.push_back(1.0f);
+
 			idx += 6;
 		}
 	}
@@ -130,7 +179,7 @@ void	Context::initGLFW() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Mod1", NULL, NULL);
+	window = glfwCreateWindow(windowWidth, windowHeight, "Mod1", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -153,7 +202,7 @@ void	Context::initOGL() {
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
+	// glEnable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
@@ -173,7 +222,7 @@ void	Context::initWorld() {
 	inputManager = new InputManager(window, camera);
 
 	landMesh->setVertices(generateMesh(map, size));
-	sphereMesh->setVertices(generateSphere(10.0f, 50, 50));
+	sphereMesh->setVertices(generateSphere(1.0f, 20, 20));
 }
 
 void	Context::initProjection() {
@@ -205,7 +254,7 @@ void	Context::draw() {
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	landMesh->render(renderer->getLandShader());
-	sphereMesh->render(renderer->getSphereShader());
+	sphereMesh->render(renderer->getLandShader());
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
