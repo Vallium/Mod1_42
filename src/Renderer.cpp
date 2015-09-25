@@ -23,6 +23,11 @@ Shader		*Renderer::getLandShader(void) {
 	return _landShader;
 }
 
+Shader		*Renderer::getSphereShader(void) {
+	return _sphereShader;
+}
+
 void		Renderer::loadShaders(void) {
 	_landShader = new Shader("shaders/land.vert", "shaders/land.frag");
+	_sphereShader = new Shader("shaders/sphere.vert", "shaders/sphere.frag");
 }

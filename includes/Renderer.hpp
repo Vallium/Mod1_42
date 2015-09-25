@@ -18,12 +18,14 @@
 class	Renderer {
 private:
 	Shader		*_landShader;
+	Shader		*_sphereShader;
 
 public:
 	Renderer();
 	~Renderer();
 
 	Shader		*getLandShader(void);
+	Shader		*getSphereShader(void);
 	void		loadShaders(void);
 };
 

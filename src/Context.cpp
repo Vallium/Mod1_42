@@ -32,9 +32,71 @@ int		Context::windowHeight = 480;
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
 Mesh			*Context::landMesh;
+Mesh			*Context::sphereMesh;
 InputManager	*Context::inputManager;
 
 glm::mat4		Context::projection;
+
+std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
+	int faces = slices * rings;
+	// int nbV = slices * rings;
+
+	std::vector<GLfloat>	vertices;
+
+	//Allocation de mémoire
+	// float * v = new float[3 * nbV];
+	// float * n = new float[3 * nbV];
+	// float * tex = new float[2 * nbV];
+	unsigned int * id = new unsigned int[6 * faces];
+
+	//GENERATION DE LA SPHERE
+	float x,y,z,r,s;
+	int idx = 0, tidx = 0;
+
+	float const R = 1.f/(float)(rings-1);
+	float const S = 1.f/(float)(slices-1);
+
+	for(r = 0; r < rings; ++r) {
+		for(s = 0; s < slices; ++s) {
+			x = cos( 2 * M_PI * s * S) * sin( M_PI * r * R );
+			z = sin( 2 * M_PI * s * S) * sin( M_PI * r * R );
+			y = sin(-M_PI_2 + (M_PI * r * R));
+
+			vertices.push_back(x * radius);
+			vertices.push_back(y * radius);
+			vertices.push_back(z * radius);
+			vertices.push_back(1.0f);
+			vertices.push_back(1.0f);
+			vertices.push_back(1.0f);
+
+			idx += 3;
+
+			// tex[tidx] = s*S;
+			// tex[tidx+1] = r*R;
+			tidx += 2;
+		}
+	}
+
+	idx = 0;
+	int ringStart, nextRingStart,nextslice;
+	for( r = 0; r < rings; r++ ) {
+		ringStart = r * slices;
+		nextRingStart = (r + 1) * slices;
+		for( s = 0; s < slices; s++ ) {
+			nextslice = s+1;
+			// The quad
+			id[idx] = ringStart + s;
+			id[idx+1] = nextRingStart + s;
+			id[idx+2] = nextRingStart + nextslice;
+			id[idx+3] = ringStart + s;
+			id[idx+4] = nextRingStart + nextslice;
+			id[idx+5] = ringStart + nextslice;
+			idx += 6;
+		}
+	}
+	return vertices;
+}
+
 
 void    Context::init(int ac, char **av) {
 	initMap(ac, av);
@@ -107,9 +169,11 @@ void	Context::initRenderer() {
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(-10.0f, 25.0f, -10.0f));
 	landMesh = new Mesh();
+	sphereMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 
 	landMesh->setVertices(generateMesh(map, size));
+	sphereMesh->setVertices(generateSphere(10.0f, 50, 50));
 }
 
 void	Context::initProjection() {
@@ -141,6 +205,7 @@ void	Context::draw() {
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	landMesh->render(renderer->getLandShader());
+	sphereMesh->render(renderer->getSphereShader());
 
 	// Swap the buffers
 	glfwSwapBuffers(window);

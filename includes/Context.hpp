@@ -30,6 +30,7 @@ namespace Context {
 
 	extern Renderer 		*renderer;
 	extern Mesh				*landMesh;
+	extern Mesh				*sphereMesh;
 	// extern Skybox 			*skybox;
 	// extern World	 		*world;
 	extern Camera 			*camera;

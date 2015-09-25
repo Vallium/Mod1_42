@@ -33,9 +33,9 @@ Mesh::Mesh() {
 	glBindBuffer(GL_ARRAY_BUFFER, _instancedVBO);
 
 	// Instanced Position attribute
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glVertexAttribDivisor(3, 1);
-	glEnableVertexAttribArray(3);
+	// glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	// glVertexAttribDivisor(3, 1);
+	// glEnableVertexAttribArray(3);
 
 	glBindVertexArray(0);
 
