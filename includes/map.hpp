@@ -30,7 +30,7 @@ std::vector<int>			parse(std::string name);
 int							pgcd(int a, int b);
 int							ppcm(int a, int b);
 float						**create_tab(std::vector<int> &pts, int &size);
-void 						hill( float **map, int size, int x, int y, int zin);
+void 						hill(float **map, int size, int x, int y, int zin);
 void						errect_hills(float **tab, int size, std::vector<int> pts);
 
 #endif

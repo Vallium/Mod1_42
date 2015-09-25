@@ -20,7 +20,9 @@ SRC			=	main.cpp		\
 				Shader.cpp		\
 				Context.cpp		\
 				InputManager.cpp	\
-				map.cpp
+				map.cpp			\
+				Drop.cpp		\
+				sphere.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src
