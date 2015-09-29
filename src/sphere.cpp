@@ -12,6 +12,272 @@
 
 #include "sphere.hpp"
 
+std::vector<GLfloat>	generateCube(float size){
+	std::vector<GLfloat>	vertices;
+
+	/////////////////////////////////////
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	/////////////////////////////////////
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+/////////////////////////////
+	/////////////////////////////////////
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	/////////////////////////////////////
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+/////////////////////////////
+	/////////////////////////////////////
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	/////////////////////////////////////
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	vertices.push_back(size);
+	vertices.push_back(0.0f);
+	vertices.push_back(size);
+	vertices.push_back(0.38f);
+	vertices.push_back(0.51f);
+	vertices.push_back(0.71f);
+
+	return vertices;
+}
+
 std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
 	int faces = slices * rings;
 	int nbV = slices * rings;

@@ -115,12 +115,11 @@ void	Context::initWorld() {
 	drops = new std::vector<Drop>();
 
 	landMesh->setVertices(generateMesh(map, size));
-	sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, 5, 5));
+	// sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, DROP_RENDER_DEFINITION, DROP_RENDER_DEFINITION));
+	sphereMesh->setVertices(generateCube(DROP_RENDER_SIZE));
 
-	float	step = RENDER_SIZE/size;
-
-	for (float x = 0.0f; x < RENDER_SIZE; x += step) {
-		for (float y = 0.0f; y < RENDER_SIZE; y += step) {
+	for (float x = 0.0f; x < RENDER_SIZE; x += DROP_PHYSIC_SIZE) {
+		for (float y = 0.0f; y < RENDER_SIZE; y += DROP_PHYSIC_SIZE) {
 			drops->push_back(Drop(glm::vec3(x, 20.0f, y)));
 		}
 	}
@@ -147,8 +146,30 @@ void	Context::update() {
 	glfwPollEvents();
 	inputManager->update(deltaTime);
 	// world->update(deltaTime);
-	std::vector<float>		tmp;
 
+	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
+		glm::vec3 velocity = drop->getVelocity();
+		velocity += glm::vec3(0.0f, -0.00981f, 0.0f);
+		velocity.x *= 0.8f;
+		velocity.y *= 0.8f;
+		velocity.z *= 0.8f;
+		drop->setVelocity(velocity);
+	}
+
+	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
+		glm::vec3 pos = drop->getPos();
+		pos = (pos + drop->getVelocity());
+		int x = static_cast<int>(pos.x * size / RENDER_SIZE);
+		int z = static_cast<int>(pos.z * size / RENDER_SIZE);
+
+		float y = static_cast<float>(map[x][z]) / static_cast<float>(size) * RENDER_SIZE;
+
+		if (pos.y < y)
+			pos.y = y;
+		drop->setPos(pos);
+	}
+
+	std::vector<float>		tmp;
 	for (auto it = drops->begin(); it != drops->end(); ++it) {
 		tmp.push_back(it->getPos().x);
 		tmp.push_back(it->getPos().y);

@@ -15,8 +15,9 @@
 
 # include <glm/glm.hpp>
 
-# define DROP_RENDER_SIZE 0.2f
-# define DROP_PHYSIC_SIZE 0.1f
+# define DROP_RENDER_SIZE 0.1f
+# define DROP_RENDER_DEFINITION 4
+# define DROP_PHYSIC_SIZE 0.05f
 
 class	Drop {
 private:
@@ -27,6 +28,10 @@ public:
 	Drop(glm::vec3 pos);
 
 	glm::vec3	getPos(void) const;
+	glm::vec3	getVelocity(void) const;
+
+	void		setPos(glm::vec3 pos);
+	void		setVelocity(glm::vec3 v);
 };
 
 #endif
