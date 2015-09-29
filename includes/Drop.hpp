@@ -25,6 +25,8 @@ private:
 
 public:
 	Drop(glm::vec3 pos);
+
+	glm::vec3	getPos(void) const;
 };
 
 #endif

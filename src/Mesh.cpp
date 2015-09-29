@@ -54,9 +54,10 @@ void	Mesh::setVertices(std::vector<GLfloat> vert) {
 }
 
 void	Mesh::setInstances(std::vector<GLfloat> instancesArray) {
+	_instanceBuffer = instancesArray;
 	glBindVertexArray(_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, _instancedVBO);
-	glBufferData(GL_ARRAY_BUFFER, instancesArray.size() * sizeof(GLfloat), &(instancesArray[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _instanceBuffer.size() * sizeof(GLfloat), &(_instanceBuffer[0]), GL_STATIC_DRAW);
 	glBindVertexArray(0);
 }
 

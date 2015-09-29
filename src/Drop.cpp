@@ -15,3 +15,7 @@
 Drop::Drop(glm::vec3 pos) : _pos(pos) {
 	_velocity = glm::vec3(0, 0, 0);
 }
+
+glm::vec3	Drop::getPos(void) const {
+	return (_pos);
+}

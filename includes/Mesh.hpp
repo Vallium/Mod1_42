@@ -35,6 +35,7 @@ private:
 	glm::vec3	_pos;
 
 	std::vector<GLfloat>	_vertices;
+	std::vector<GLfloat>	_instanceBuffer;
 
 public:
 	Mesh();

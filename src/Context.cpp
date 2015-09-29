@@ -35,6 +35,7 @@ Camera 			*Context::camera;
 Mesh			*Context::landMesh;
 Mesh			*Context::sphereMesh;
 InputManager	*Context::inputManager;
+std::vector<Drop>	*Context::drops;
 
 glm::mat4		Context::projection;
 
@@ -111,15 +112,26 @@ void	Context::initWorld() {
 	landMesh = new Mesh();
 	sphereMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
+	drops = new std::vector<Drop>();
 
 	landMesh->setVertices(generateMesh(map, size));
-	sphereMesh->setVertices(generateSphere(0.2f, 10, 10));
+	sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, 5, 5));
+
+	float	step = RENDER_SIZE/size;
+
+	for (float x = 0.0f; x < RENDER_SIZE; x += step) {
+		for (float y = 0.0f; y < RENDER_SIZE; y += step) {
+			drops->push_back(Drop(glm::vec3(x, 20.0f, y)));
+		}
+	}
 }
 
 void	Context::initProjection() {
 	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	renderer->getSphereShader()->Use();
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 
@@ -135,6 +147,14 @@ void	Context::update() {
 	glfwPollEvents();
 	inputManager->update(deltaTime);
 	// world->update(deltaTime);
+	std::vector<float>		tmp;
+
+	for (auto it = drops->begin(); it != drops->end(); ++it) {
+		tmp.push_back(it->getPos().x);
+		tmp.push_back(it->getPos().y);
+		tmp.push_back(it->getPos().z);
+	}
+	sphereMesh->setInstances(tmp);
 }
 
 void	Context::draw() {
@@ -144,8 +164,10 @@ void	Context::draw() {
 
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	renderer->getSphereShader()->Use();
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	landMesh->render(renderer->getLandShader());
-	sphereMesh->render(renderer->getLandShader());
+	sphereMesh->render(renderer->getSphereShader(), drops->size());
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
@@ -155,6 +177,7 @@ void	Context::deinit() {
 	delete renderer;
 	delete inputManager;
 	delete landMesh;
+	delete sphereMesh;
 
 	//TODO: Properly de-allocate all resources once they've outlived their purpose
 	glfwTerminate();
