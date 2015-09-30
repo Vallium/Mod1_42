@@ -24,7 +24,7 @@
 
 # include <glm/glm.hpp>
 
-std::vector<GLfloat>		generateMesh(float **map, int size);
+GLfloat						*generateLandMesh(float **map, int size, unsigned int &bufferSize);
 std::vector<std::string>	split(std::string str, char delimiter);
 std::vector<int>			parse(std::string name);
 int							pgcd(int a, int b);

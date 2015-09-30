@@ -9,6 +9,6 @@
 # include <glm/glm.hpp>
 
 std::vector<GLfloat>	generateSphere(float radius, int rings,int slices);
-std::vector<GLfloat>	generateCube(float size);
+GLfloat					*generateCubeMesh(float size, unsigned int &bufferSize);
 
 #endif

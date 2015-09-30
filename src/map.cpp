@@ -16,61 +16,65 @@
 #include <sstream>
 #include <fstream>
 
-std::vector<GLfloat>	generateMesh(float **map, int size) {
-	std::vector<GLfloat>	vertices;
+GLfloat		*generateLandMesh(float **map, int size, unsigned int &bufferSize) {
 	float ratio = RENDER_SIZE / static_cast<float>(size);
 
+	bufferSize = size * size * 6 * 6;
+
+	GLfloat *buffer = new float[bufferSize];
+
+	unsigned int i = 0;
 	for (int y = 0; y < size-1; y++) {
 		int x;
 		for (x = 0; x < size-1; x++) {
 			float	xf = static_cast<float>(x);
 			float	yf = static_cast<float>(y);
 
-			vertices.push_back(xf * ratio);
-			vertices.push_back(map[x][y] * ratio);
-			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = xf * ratio;
+			buffer[i++] = map[x][y] * ratio;
+			buffer[i++] = yf * ratio;
+			buffer[i++] = 0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 
-			vertices.push_back(xf * ratio);
-			vertices.push_back(map[x][y + 1] * ratio);
-			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = xf * ratio;
+			buffer[i++] = map[x][y + 1] * ratio;
+			buffer[i++] = (yf + 1.0f) * ratio;
+			buffer[i++] = 0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 
-			vertices.push_back((xf + 1.0f) * ratio);
-			vertices.push_back(map[x + 1][y] * ratio);
-			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = (xf + 1.0f) * ratio;
+			buffer[i++] = map[x + 1][y] * ratio;
+			buffer[i++] = yf * ratio;
+			buffer[i++] = 0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 
-			vertices.push_back((xf + 1.0f) * ratio);
-			vertices.push_back(map[x + 1][y + 1] * ratio);
-			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = (xf + 1.0f) * ratio;
+			buffer[i++] = map[x + 1][y + 1] * ratio;
+			buffer[i++] = (yf + 1.0f) * ratio;
+			buffer[i++] = 0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 
 
-			vertices.push_back((xf + 1.0f) * ratio);
-			vertices.push_back(map[x + 1][y] * ratio);
-			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = (xf + 1.0f) * ratio;
+			buffer[i++] = map[x + 1][y] * ratio;
+			buffer[i++] = yf * ratio;
+			buffer[i++] = 0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 
-			vertices.push_back(xf * ratio);
-			vertices.push_back(map[x][y + 1] * ratio);
-			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
-			vertices.push_back(0.4f);
-			vertices.push_back(0.0f);
+			buffer[i++] = xf * ratio;
+			buffer[i++] = map[x][y + 1] * ratio;
+			buffer[i++] = (yf + 1.0f) * ratio;
+			buffer[i++] = 0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f);
+			buffer[i++] = 0.4f;
+			buffer[i++] = 0.0f;
 		}
 	}
-	return vertices;
+	return buffer;
 }
 
 std::vector<std::string>		split(std::string str, char delimiter) {

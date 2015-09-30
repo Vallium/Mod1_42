@@ -12,270 +12,273 @@
 
 #include "sphere.hpp"
 
-std::vector<GLfloat>	generateCube(float size){
-	std::vector<GLfloat>	vertices;
+GLfloat		*generateCubeMesh(float size, unsigned int &bufferSize) {
+	bufferSize = 6 * 6 * 6;
+	GLfloat *buffer = new float[bufferSize];
+
+	unsigned int i = 0;
 
 	/////////////////////////////////////
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
 	/////////////////////////////////////
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
 /////////////////////////////
 	/////////////////////////////////////
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
 	/////////////////////////////////////
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
 /////////////////////////////
 	/////////////////////////////////////
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
 	/////////////////////////////////////
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	vertices.push_back(size);
-	vertices.push_back(0.0f);
-	vertices.push_back(size);
-	vertices.push_back(0.38f);
-	vertices.push_back(0.51f);
-	vertices.push_back(0.71f);
+	buffer[i++] = size;
+	buffer[i++] = 0.0f;
+	buffer[i++] = size;
+	buffer[i++] = 0.38f;
+	buffer[i++] = 0.51f;
+	buffer[i++] = 0.71f;
 
-	return vertices;
+	return buffer;
 }
 
 std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
@@ -303,7 +306,7 @@ std::vector<GLfloat>	generateSphere(float radius, int rings,int slices){
 			z = sin( 2 * M_PI * s * S) * sin( M_PI * r * R );
 			y = sin(-M_PI_2 + (M_PI * r * R));
 
-			// vertices.push_back(x * radius);
+			// buffer[i++] = x * radius;
 			// vertices.push_back(y * radius);
 			// vertices.push_back(z * radius);
 			// vertices.push_back(1.0f);

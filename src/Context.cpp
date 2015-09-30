@@ -33,7 +33,7 @@ int		Context::windowHeight = 1080;
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
 Mesh			*Context::landMesh;
-Mesh			*Context::sphereMesh;
+Mesh			*Context::particleMesh;
 InputManager	*Context::inputManager;
 std::vector<Drop>	*Context::drops;
 
@@ -110,13 +110,17 @@ void	Context::initRenderer() {
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(-RENDER_SIZE / 2.0f, RENDER_SIZE, -RENDER_SIZE / 2.0f));
 	landMesh = new Mesh();
-	sphereMesh = new Mesh();
+	particleMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 	drops = new std::vector<Drop>();
 
-	landMesh->setVertices(generateMesh(map, size));
-	// sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, DROP_RENDER_DEFINITION, DROP_RENDER_DEFINITION));
-	sphereMesh->setVertices(generateCube(DROP_RENDER_SIZE));
+	unsigned int landVertexBufferSize;
+	GLfloat		*landVertexBuffer = generateLandMesh(map, size, landVertexBufferSize);
+	landMesh->setVertexBuffer(landVertexBuffer, landVertexBufferSize);
+
+	unsigned int particleVertexBufferSize;
+	GLfloat		*particleVertexBuffer = generateCubeMesh(size, particleVertexBufferSize);
+	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 
 	for (float x = 0.0f; x < size; x += 10) {
 		for (float y = 0.0f; y < size; y += 10) {
@@ -149,13 +153,15 @@ void	Context::update() {
 
 	Drop::update(drops, deltaTime);
 
-	std::vector<float>		tmp;
+	unsigned int tmpSize = drops->size() * 3;
+	GLfloat		*tmp = new float[tmpSize];
+	unsigned int i = 0;
 	for (auto it = drops->begin(); it != drops->end(); ++it) {
-		tmp.push_back(it->getPos().x / static_cast<float>(size) * RENDER_SIZE);
-		tmp.push_back(it->getPos().y / static_cast<float>(size) * RENDER_SIZE);
-		tmp.push_back(it->getPos().z / static_cast<float>(size) * RENDER_SIZE);
+		tmp[i++] = it->getPos().x / static_cast<float>(size) * RENDER_SIZE;
+		tmp[i++] = it->getPos().y / static_cast<float>(size) * RENDER_SIZE;
+		tmp[i++] = it->getPos().z / static_cast<float>(size) * RENDER_SIZE;
 	}
-	sphereMesh->setInstances(tmp);
+	particleMesh->setInstanceBuffer(tmp, tmpSize);
 }
 
 void	Context::draw() {
@@ -168,7 +174,7 @@ void	Context::draw() {
 	renderer->getSphereShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	landMesh->render(renderer->getLandShader());
-	sphereMesh->render(renderer->getSphereShader(), drops->size());
+	particleMesh->render(renderer->getSphereShader(), drops->size());
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
@@ -178,7 +184,7 @@ void	Context::deinit() {
 	delete renderer;
 	delete inputManager;
 	delete landMesh;
-	delete sphereMesh;
+	delete particleMesh;
 
 	//TODO: Properly de-allocate all resources once they've outlived their purpose
 	glfwTerminate();
