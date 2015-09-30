@@ -27,8 +27,13 @@ float	**Context::map;
 
 GLFWwindow* Context::window;
 
+// iMac 42
 int		Context::windowWidth = 1920;
 int		Context::windowHeight = 1080;
+
+// Retina
+// int		Context::windowWidth = 1440;
+// int		Context::windowHeight = 900;
 
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
@@ -79,6 +84,9 @@ void	Context::initGLFW() {
 	}
 
 	glfwMakeContextCurrent(window);
+
+	// get the actual size of the window in pixels on displays that use window
+	glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
 	srand(1234);
 
