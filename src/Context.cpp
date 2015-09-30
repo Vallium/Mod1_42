@@ -27,8 +27,8 @@ float	**Context::map;
 
 GLFWwindow* Context::window;
 
-int		Context::windowWidth = 800;
-int		Context::windowHeight = 600;
+int		Context::windowWidth = 2560;
+int		Context::windowHeight = 1440;
 
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
@@ -147,27 +147,7 @@ void	Context::update() {
 	inputManager->update(deltaTime);
 	// world->update(deltaTime);
 
-	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
-		glm::vec3 velocity = drop->getVelocity();
-		velocity += glm::vec3(0.0f, -0.00981f, 0.0f);
-		velocity.x *= 0.8f;
-		velocity.y *= 0.8f;
-		velocity.z *= 0.8f;
-		drop->setVelocity(velocity);
-	}
-
-	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
-		glm::vec3 pos = drop->getPos();
-		pos = (pos + drop->getVelocity());
-		int x = static_cast<int>(pos.x * size / RENDER_SIZE);
-		int z = static_cast<int>(pos.z * size / RENDER_SIZE);
-
-		float y = static_cast<float>(map[x][z]) / static_cast<float>(size) * RENDER_SIZE;
-
-		if (pos.y < y)
-			pos.y = y;
-		drop->setPos(pos);
-	}
+	Drop::update(drops, deltaTime);
 
 	std::vector<float>		tmp;
 	for (auto it = drops->begin(); it != drops->end(); ++it) {

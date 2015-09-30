@@ -19,6 +19,8 @@
 # define DROP_RENDER_DEFINITION 4
 # define DROP_PHYSIC_SIZE 0.05f
 
+# include <vector>
+
 class	Drop {
 private:
 	glm::vec3	_pos;
@@ -32,6 +34,8 @@ public:
 
 	void		setPos(glm::vec3 pos);
 	void		setVelocity(glm::vec3 v);
+
+	static void		update(std::vector<Drop> *drops, float dt);
 };
 
 #endif
