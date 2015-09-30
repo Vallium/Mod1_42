@@ -27,8 +27,8 @@ float	**Context::map;
 
 GLFWwindow* Context::window;
 
-int		Context::windowWidth = 2560;
-int		Context::windowHeight = 1440;
+int		Context::windowWidth = 1920;
+int		Context::windowHeight = 1080;
 
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
@@ -118,8 +118,8 @@ void	Context::initWorld() {
 	// sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, DROP_RENDER_DEFINITION, DROP_RENDER_DEFINITION));
 	sphereMesh->setVertices(generateCube(DROP_RENDER_SIZE));
 
-	for (float x = 0.0f; x < RENDER_SIZE; x += DROP_PHYSIC_SIZE) {
-		for (float y = 0.0f; y < RENDER_SIZE; y += DROP_PHYSIC_SIZE) {
+	for (float x = 0.0f; x < RENDER_SIZE; x += DROP_PHYSIC_SIZE * 10) {
+		for (float y = 0.0f; y < RENDER_SIZE; y += DROP_PHYSIC_SIZE * 10) {
 			drops->push_back(Drop(glm::vec3(x, 20.0f, y)));
 		}
 	}
