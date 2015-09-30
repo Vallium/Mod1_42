@@ -15,7 +15,7 @@
 
 # define BASE_SIZE 20000
 # define MIN_TAB_SIZE 500
-# define RENDER_SIZE 20.0f
+# define RENDER_SIZE 100.0f
 
 # include <vector>
 

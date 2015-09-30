@@ -40,7 +40,7 @@ void		Drop::setVelocity(glm::vec3 v) {
 void		Drop::update(std::vector<Drop> *drops, float dt) {
 	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
 		glm::vec3 velocity = drop->getVelocity();
-		velocity += glm::vec3(0.0f, -0.0981f * dt, 0.0f);
+		velocity += glm::vec3(0.0f, -1.4f * dt, 0.0f);
 		velocity.x = velocity.x - (velocity.x * 0.2f * dt);
 		velocity.y = velocity.y - (velocity.y * 0.2f * dt);
 		velocity.z = velocity.z - (velocity.z * 0.2f * dt);
@@ -50,8 +50,8 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
 		glm::vec3 pos = drop->getPos();
 		pos = (pos + drop->getVelocity());
-		int x = static_cast<int>(pos.x * Context::size / RENDER_SIZE);
-		int z = static_cast<int>(pos.z * Context::size / RENDER_SIZE);
+		int x = static_cast<int>(pos.x);
+		int z = static_cast<int>(pos.z);
 
 		if (x < 0)
 			x = 0;
@@ -62,37 +62,27 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 		else if (z >= Context::size)
 			z = Context::size - 1;
 
-		float y = static_cast<float>(Context::map[x][z]) / static_cast<float>(Context::size) * RENDER_SIZE;
+		float y1 = static_cast<float>(Context::map[x][z]);
+		float y2 = x + 1 < Context::size ? static_cast<float>(Context::map[x + 1][z]) : 0;
+		float y3 = z + 1 < Context::size ? static_cast<float>(Context::map[x][z + 1]) : 0;
+
+		float y = (y1 + y2 + y3) / 3.00f;
 
 		if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
 			glm::vec3	n;
 
 			glm::vec3	velocity = drop->getVelocity();
 
-			velocity.x = -velocity.x * 1.0f;
-			velocity.y = -velocity.y * 1.0f;
-			velocity.z = -velocity.z * 1.0f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.y = -velocity.y * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
 
 			if (pos.y < y) {
 				pos.y = y;
-				float y2 = x + 1 < Context::size ? static_cast<float>(Context::map[x + 1][z]) / static_cast<float>(Context::size) * RENDER_SIZE : 0;
-				float y3 = z + 1 < Context::size ? static_cast<float>(Context::map[x][z + 1]) / static_cast<float>(Context::size) * RENDER_SIZE : 0;
-				glm::vec3	u(1, y2 - y, 0);
-				glm::vec3	v(0, y3 - y, 1);
+				glm::vec3	u(1, y2 - y1, 0);
+				glm::vec3	v(0, y3 - y1, 1);
 				// std::cout << y << " " << y2 << " " << y3 << std::endl;
 				n = glm::normalize(glm::cross(v, u));
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-
-			if (pos.x < 0) {
-				pos.x = 0;
-				n = glm::vec3(1, 0, 0);
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-
-			if (pos.z < 0) {
-				pos.z = 0;
-				n = glm::vec3(0, 0, 1);
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
 
@@ -101,10 +91,20 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 				n = glm::vec3(-1, 0, 0);
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
+			else if (pos.x < 0) {
+				pos.x = 0;
+				n = glm::vec3(1, 0, 0);
+				velocity = glm::rotate(velocity, 180.0f, n);
+			}
 
 			if (pos.z >= Context::size) {
 				pos.z = Context::size - 1;
 				n = glm::vec3(0, 0, -1);
+				velocity = glm::rotate(velocity, 180.0f, n);
+			}
+			else if (pos.z < 0) {
+				pos.z = 0;
+				n = glm::vec3(0, 0, 1);
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
 

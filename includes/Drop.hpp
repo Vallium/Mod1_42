@@ -15,7 +15,7 @@
 
 # include <glm/glm.hpp>
 
-# define DROP_RENDER_SIZE 0.1f
+# define DROP_RENDER_SIZE 0.3f
 # define DROP_RENDER_DEFINITION 4
 # define DROP_PHYSIC_SIZE 0.05f
 

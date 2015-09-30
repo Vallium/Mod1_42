@@ -29,28 +29,28 @@ std::vector<GLfloat>	generateMesh(float **map, int size) {
 			vertices.push_back(xf * ratio);
 			vertices.push_back(map[x][y] * ratio);
 			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
 			vertices.push_back(xf * ratio);
 			vertices.push_back(map[x][y + 1] * ratio);
 			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
 			vertices.push_back((xf + 1.0f) * ratio);
 			vertices.push_back(map[x + 1][y] * ratio);
 			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
 			vertices.push_back((xf + 1.0f) * ratio);
 			vertices.push_back(map[x + 1][y + 1] * ratio);
 			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
@@ -58,14 +58,14 @@ std::vector<GLfloat>	generateMesh(float **map, int size) {
 			vertices.push_back((xf + 1.0f) * ratio);
 			vertices.push_back(map[x + 1][y] * ratio);
 			vertices.push_back(yf * ratio);
-			vertices.push_back(0.8f * map[x+1][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x+1][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 
 			vertices.push_back(xf * ratio);
 			vertices.push_back(map[x][y + 1] * ratio);
 			vertices.push_back((yf + 1.0f) * ratio);
-			vertices.push_back(0.8f * map[x][y] * ratio / 5.0f);
+			vertices.push_back(0.8f * map[x][y] * ratio / (RENDER_SIZE / 4.0f));
 			vertices.push_back(0.4f);
 			vertices.push_back(0.0f);
 		}

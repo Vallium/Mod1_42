@@ -108,7 +108,7 @@ void	Context::initRenderer() {
 }
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(-10.0f, 25.0f, -10.0f));
+	camera = new Camera(glm::vec3(-RENDER_SIZE / 2.0f, RENDER_SIZE, -RENDER_SIZE / 2.0f));
 	landMesh = new Mesh();
 	sphereMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
@@ -118,9 +118,9 @@ void	Context::initWorld() {
 	// sphereMesh->setVertices(generateSphere(DROP_RENDER_SIZE, DROP_RENDER_DEFINITION, DROP_RENDER_DEFINITION));
 	sphereMesh->setVertices(generateCube(DROP_RENDER_SIZE));
 
-	for (float x = 0.0f; x < RENDER_SIZE; x += DROP_PHYSIC_SIZE * 10) {
-		for (float y = 0.0f; y < RENDER_SIZE; y += DROP_PHYSIC_SIZE * 10) {
-			drops->push_back(Drop(glm::vec3(x, 20.0f, y)));
+	for (float x = 0.0f; x < size; x += 10) {
+		for (float y = 0.0f; y < size; y += 10) {
+			drops->push_back(Drop(glm::vec3(x, size, y)));
 		}
 	}
 }
@@ -151,9 +151,9 @@ void	Context::update() {
 
 	std::vector<float>		tmp;
 	for (auto it = drops->begin(); it != drops->end(); ++it) {
-		tmp.push_back(it->getPos().x);
-		tmp.push_back(it->getPos().y);
-		tmp.push_back(it->getPos().z);
+		tmp.push_back(it->getPos().x / static_cast<float>(size) * RENDER_SIZE);
+		tmp.push_back(it->getPos().y / static_cast<float>(size) * RENDER_SIZE);
+		tmp.push_back(it->getPos().z / static_cast<float>(size) * RENDER_SIZE);
 	}
 	sphereMesh->setInstances(tmp);
 }

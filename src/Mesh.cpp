@@ -61,6 +61,7 @@ void	Mesh::setInstances(std::vector<GLfloat> instancesArray) {
 	glBindVertexArray(0);
 }
 
+
 void	Mesh::render(Shader *shader) {
 	shader->Use();
 
