@@ -37,19 +37,22 @@ void		Drop::setVelocity(glm::vec3 v) {
 	_velocity = v;
 }
 
-void		Drop::update(std::vector<Drop> *drops, float dt) {
-	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
-		glm::vec3 velocity = drop->getVelocity();
+void		Drop::update(Octree *dropsOctree, float dt) {
+	std::vector<Drop*> drops;
+
+	dropsOctree->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), drops);
+	for (auto drop = drops.begin(); drop != drops.end(); ++drop) {
+		glm::vec3 velocity = (*drop)->getVelocity();
 		velocity += glm::vec3(0.0f, -1.4f * dt, 0.0f);
 		velocity.x = velocity.x - (velocity.x * 0.2f * dt);
 		velocity.y = velocity.y - (velocity.y * 0.2f * dt);
 		velocity.z = velocity.z - (velocity.z * 0.2f * dt);
-		drop->setVelocity(velocity);
+		(*drop)->setVelocity(velocity);
 	}
 
-	for (auto drop = drops->begin(); drop != drops->end(); ++drop) {
-		glm::vec3 pos = drop->getPos();
-		pos = (pos + drop->getVelocity());
+	for (auto drop = drops.begin(); drop != drops.end(); ++drop) {
+		glm::vec3 pos = (*drop)->getPos();
+		pos = (pos + (*drop)->getVelocity());
 		int x = static_cast<int>(pos.x);
 		int z = static_cast<int>(pos.z);
 
@@ -68,7 +71,7 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 
 		float y = (y1 + y2 + y3) / 3.00f;
 
-		glm::vec3	velocity = drop->getVelocity();
+		glm::vec3	velocity = (*drop)->getVelocity();
 
 		if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
 			glm::vec3	n;
@@ -107,13 +110,15 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 				n = glm::vec3(0, 0, 1);
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
-			drop->setVelocity(velocity);
+			(*drop)->setVelocity(velocity);
 		}
-		drop->setPos(pos);
+		(*drop)->setPos(pos);
 
-		for (auto drop2 = drops->begin(); drop2 != drops->end(); ++drop2) {
+		std::vector<Drop*> dropsNear;
 
-			glm::vec3 pos2 = drop2->getPos();
+		dropsOctree->getPointsInsideBox(glm::vec3(pos.x - DROP_PHYSIC_SIZE, pos.y - DROP_PHYSIC_SIZE, pos.z - DROP_PHYSIC_SIZE), glm::vec3(pos.x + DROP_PHYSIC_SIZE, pos.y + DROP_PHYSIC_SIZE, pos.z + DROP_PHYSIC_SIZE), dropsNear);
+		for (auto drop2 = dropsNear.begin(); drop2 != dropsNear.end(); ++drop2) {
+			glm::vec3 pos2 = (*drop2)->getPos();
 			if (pos != pos2) {
 				glm::vec3	diff = pos - pos2;
 				float	dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
@@ -126,7 +131,7 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 				}
 			}
 		}
-		drop->setVelocity(velocity);
-		drop->setPos(pos);
+		(*drop)->setVelocity(velocity);
+		(*drop)->setPos(pos);
 	}
 }

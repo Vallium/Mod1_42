@@ -16,6 +16,7 @@
 #include "Camera.hpp"
 #include "Renderer.hpp"
 #include "InputManager.hpp"
+#include "Octree.hpp"
 
 #include <iostream>
 
@@ -40,7 +41,7 @@ Camera 			*Context::camera;
 Mesh			*Context::landMesh;
 Mesh			*Context::particleMesh;
 InputManager	*Context::inputManager;
-std::vector<Drop>	*Context::drops;
+Octree			*Context::drops;
 
 glm::mat4		Context::projection;
 
@@ -120,7 +121,7 @@ void	Context::initWorld() {
 	landMesh = new Mesh();
 	particleMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
-	drops = new std::vector<Drop>();
+	drops = new Octree(glm::vec3(size / 2, size / 2, size / 2), glm::vec3(size / 2, size / 2, size / 2));
 
 	unsigned int landVertexBufferSize;
 	GLfloat		*landVertexBuffer = generateLandMesh(map, size, landVertexBufferSize);
@@ -134,9 +135,9 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = DROP_PHYSIC_SIZE; x < size; x += 50) {
-		for (float y = DROP_PHYSIC_SIZE; y < size; y += 50) {
-			drops->push_back(Drop(glm::vec3(x, size, y)));
+	for (float x = DROP_PHYSIC_SIZE; x < size; x += 10) {
+		for (float y = DROP_PHYSIC_SIZE; y < size; y += 10) {
+			drops->insert(new Drop(glm::vec3(x, size, y)));
 			// drops->push_back(Drop(glm::vec3(4, 0, 5)));
 		}
 	}
@@ -166,13 +167,17 @@ void	Context::update() {
 
 	Drop::update(drops, deltaTime);
 
-	unsigned int tmpSize = drops->size() * 3;
+	std::vector<Drop*> dropsTmp;
+
+	drops->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), dropsTmp);
+
+	unsigned int tmpSize = dropsTmp.size() * 3;
 	GLfloat		*tmp = new float[tmpSize];
 	unsigned int i = 0;
-	for (auto it = drops->begin(); it != drops->end(); ++it) {
-		tmp[i++] = it->getPos().x / static_cast<float>(size) * RENDER_SIZE;
-		tmp[i++] = it->getPos().y / static_cast<float>(size) * RENDER_SIZE;
-		tmp[i++] = it->getPos().z / static_cast<float>(size) * RENDER_SIZE;
+	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it) {
+		tmp[i++] = (*it)->getPos().x / static_cast<float>(size) * RENDER_SIZE;
+		tmp[i++] = (*it)->getPos().y / static_cast<float>(size) * RENDER_SIZE;
+		tmp[i++] = (*it)->getPos().z / static_cast<float>(size) * RENDER_SIZE;
 	}
 
 	GLfloat		*tmpPtr = particleMesh->getInstanceBuffer();
@@ -193,7 +198,7 @@ void	Context::draw() {
 	renderer->getSphereShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 	landMesh->render(renderer->getLandShader());
-	particleMesh->render(renderer->getSphereShader(), drops->size());
+	particleMesh->render(renderer->getSphereShader(), drops->count);
 
 	// Swap the buffers
 	glfwSwapBuffers(window);

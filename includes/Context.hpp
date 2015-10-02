@@ -16,6 +16,8 @@
 #include "Mesh.hpp"
 #include "InputManager.hpp"
 #include "Drop.hpp"
+#include "Octree.hpp"
+
 
 namespace Context {
 	extern float	deltaTime;
@@ -33,7 +35,7 @@ namespace Context {
 	extern Mesh				*landMesh;
 	extern Mesh				*particleMesh;
 	// extern Skybox 			*skybox;
-	extern std::vector<Drop>	 *drops;
+	extern Octree			*drops;
 	extern Camera 			*camera;
 	extern InputManager 	*inputManager;
 
