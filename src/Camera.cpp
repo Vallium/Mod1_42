@@ -30,7 +30,7 @@ Camera::Camera(glm::vec3 p)
 	_pitch = 0.0f;
 	_zoom = 45.0f;
 
-	_speed = 20.0f;
+	_speed = 60.0f;
 }
 
 void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
