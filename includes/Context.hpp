@@ -31,7 +31,7 @@ namespace Context {
 
 	extern Renderer 		*renderer;
 	extern Mesh				*landMesh;
-	extern Mesh				*sphereMesh;
+	extern Mesh				*particleMesh;
 	// extern Skybox 			*skybox;
 	extern std::vector<Drop>	 *drops;
 	extern Camera 			*camera;

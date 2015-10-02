@@ -17,6 +17,7 @@ Mesh::Mesh() {
 	glGenVertexArrays(1, &_VAO);
 	glGenBuffers(1, &_VBO);
 	glGenBuffers(1, &_instancedVBO);
+	glGenBuffers(1, &_EBO);
 
 	glBindVertexArray(_VAO);
 
@@ -37,45 +38,70 @@ Mesh::Mesh() {
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(3);
 
+	// glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	glBindVertexArray(0);
 
 	_pos = glm::vec3(0,0,0);
 
-	setVertices({0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
-	setInstances({0.0f, 0.0f, 0.0f});
+	_vertexBuffer = nullptr;
+	_instanceBuffer = nullptr;
+	_elementBuffer = nullptr;
+
+	GLfloat		*tmp = new GLfloat[3];
+
+	for (size_t i = 0; i < 3; i++)
+		tmp[i] = 0;
+	setInstanceBuffer(tmp, 3);
 }
 
-void	Mesh::setVertices(std::vector<GLfloat> vert) {
-	_vertices = vert;
+void	Mesh::setVertexBuffer(GLfloat *buffer, unsigned int size) {
+	_vertexBuffer = buffer;
+	_vertexBufferSize = size;
 	glBindVertexArray(_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(GLfloat), &(_vertices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _vertexBufferSize * sizeof(GLfloat), _vertexBuffer, GL_STATIC_DRAW);
 	glBindVertexArray(0);
 }
 
-void	Mesh::setInstances(std::vector<GLfloat> instancesArray) {
-	_instanceBuffer = instancesArray;
+void	Mesh::setInstanceBuffer(GLfloat *buffer, unsigned int size) {
+	_instanceBuffer = buffer;
+	_instanceBufferSize = size;
 	glBindVertexArray(_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, _instancedVBO);
-	glBufferData(GL_ARRAY_BUFFER, _instanceBuffer.size() * sizeof(GLfloat), &(_instanceBuffer[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, _instanceBufferSize * sizeof(GLfloat), _instanceBuffer, GL_STATIC_DRAW);
 	glBindVertexArray(0);
+}
+
+void	Mesh::setElementBuffer(GLuint *buffer, unsigned int size) {
+	_elementBuffer = buffer;
+	_elementBufferSize = size;
+	glBindVertexArray(_VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _elementBufferSize * sizeof(GLuint), _elementBuffer, GL_STATIC_DRAW);
+	glBindVertexArray(0);
+}
+
+GLfloat		*Mesh::getVertexBuffer(void) {
+	return _vertexBuffer;
+}
+
+GLfloat		*Mesh::getInstanceBuffer(void) {
+	return _instanceBuffer;
+}
+
+GLuint		*Mesh::getElementBuffer(void) {
+	return _elementBuffer;
 }
 
 
 void	Mesh::render(Shader *shader) {
-	shader->Use();
-
-	glm::mat4 model;
-
-	model = glm::translate(model, _pos);
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-	glBindVertexArray(_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() / 6);
-	glBindVertexArray(0);
+	render(shader, 1);
 }
 
 void	Mesh::render(Shader *shader, unsigned int instances) {
+	if (_vertexBuffer == nullptr or _instanceBuffer == nullptr)
+		return;
 	shader->Use();
 
 	glm::mat4 model;
@@ -84,6 +110,9 @@ void	Mesh::render(Shader *shader, unsigned int instances) {
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
 	glBindVertexArray(_VAO);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, _vertices.size() / 6, instances);
+	if (_elementBuffer == nullptr)
+		glDrawArraysInstanced(GL_TRIANGLES, 0, _vertexBufferSize / 6, instances);
+	else
+		glDrawElementsInstanced(GL_TRIANGLES, _elementBufferSize, GL_UNSIGNED_INT, (void*)0, instances);
 	glBindVertexArray(0);
 }
