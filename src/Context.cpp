@@ -119,8 +119,12 @@ void	Context::initWorld() {
 	landMesh->setVertexBuffer(landVertexBuffer, landVertexBufferSize);
 
 	unsigned int particleVertexBufferSize;
-	GLfloat		*particleVertexBuffer = generateCubeMesh(DROP_RENDER_SIZE, particleVertexBufferSize);
+	unsigned int particleElementBufferSize;
+	GLfloat		*particleVertexBuffer = nullptr;
+	GLuint		*particleElementBuffer = nullptr;
+	generateCubeMesh(DROP_RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
+	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
 	for (float x = 0.0f; x < size; x += 10) {
 		for (float y = 0.0f; y < size; y += 10) {
@@ -161,6 +165,12 @@ void	Context::update() {
 		tmp[i++] = it->getPos().y / static_cast<float>(size) * RENDER_SIZE;
 		tmp[i++] = it->getPos().z / static_cast<float>(size) * RENDER_SIZE;
 	}
+
+	GLfloat		*tmpPtr = particleMesh->getInstanceBuffer();
+
+	if (tmpPtr != nullptr)
+		delete [] tmpPtr;
+
 	particleMesh->setInstanceBuffer(tmp, tmpSize);
 }
 

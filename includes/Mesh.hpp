@@ -41,7 +41,7 @@ private:
 	GLfloat			*_instanceBuffer;
 	unsigned int	_instanceBufferSize;
 
-	GLfloat			*_elementBuffer;
+	GLuint			*_elementBuffer;
 	unsigned int	_elementBufferSize;
 
 public:
@@ -50,7 +50,11 @@ public:
 	// void	generate(int **map, int sizeX, int sizeY);
 	void	setVertexBuffer(GLfloat *buffer, unsigned int size);
 	void	setInstanceBuffer(GLfloat *buffer, unsigned int size);
-	void	setElementBuffer(GLfloat *buffer, unsigned int size);
+	void	setElementBuffer(GLuint *buffer, unsigned int size);
+
+	GLfloat		*getVertexBuffer(void);
+	GLfloat		*getInstanceBuffer(void);
+	GLuint		*getElementBuffer(void);
 
 	void	render(Shader *shader);
 	void	render(Shader *shader, unsigned int instances);
