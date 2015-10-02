@@ -119,7 +119,7 @@ void	Context::initWorld() {
 	landMesh->setVertexBuffer(landVertexBuffer, landVertexBufferSize);
 
 	unsigned int particleVertexBufferSize;
-	GLfloat		*particleVertexBuffer = generateCubeMesh(size, particleVertexBufferSize);
+	GLfloat		*particleVertexBuffer = generateCubeMesh(DROP_RENDER_SIZE, particleVertexBufferSize);
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 
 	for (float x = 0.0f; x < size; x += 10) {
