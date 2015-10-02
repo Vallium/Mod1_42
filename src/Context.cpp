@@ -134,9 +134,10 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = 0.0f; x < size; x += 10) {
-		for (float y = 0.0f; y < size; y += 10) {
+	for (float x = DROP_PHYSIC_SIZE; x < size; x += 50) {
+		for (float y = DROP_PHYSIC_SIZE; y < size; y += 50) {
 			drops->push_back(Drop(glm::vec3(x, size, y)));
+			// drops->push_back(Drop(glm::vec3(4, 0, 5)));
 		}
 	}
 }
@@ -158,7 +159,7 @@ void	Context::update() {
 	GLfloat currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
-
+	// deltaTime *= 0.5f;
 	glfwPollEvents();
 	inputManager->update(deltaTime);
 	// world->update(deltaTime);

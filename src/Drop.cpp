@@ -68,10 +68,11 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 
 		float y = (y1 + y2 + y3) / 3.00f;
 
+		glm::vec3	velocity = drop->getVelocity();
+
 		if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
 			glm::vec3	n;
 
-			glm::vec3	velocity = drop->getVelocity();
 
 			velocity.x = -velocity.x * 0.5f;
 			velocity.y = -velocity.y * 0.5f;
@@ -81,7 +82,6 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 				pos.y = y;
 				glm::vec3	u(1, y2 - y1, 0);
 				glm::vec3	v(0, y3 - y1, 1);
-				// std::cout << y << " " << y2 << " " << y3 << std::endl;
 				n = glm::normalize(glm::cross(v, u));
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
@@ -107,9 +107,26 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 				n = glm::vec3(0, 0, 1);
 				velocity = glm::rotate(velocity, 180.0f, n);
 			}
-
 			drop->setVelocity(velocity);
 		}
+		drop->setPos(pos);
+
+		for (auto drop2 = drops->begin(); drop2 != drops->end(); ++drop2) {
+
+			glm::vec3 pos2 = drop2->getPos();
+			if (pos != pos2) {
+				glm::vec3	diff = pos - pos2;
+				float	dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+
+				if (dist < DROP_PHYSIC_SIZE) {
+					// std::cout << dist << std::endl;
+					velocity.x = velocity.x + (diff.x * DROP_PHYSIC_SIZE / dist);
+					velocity.y = velocity.y + (diff.y * DROP_PHYSIC_SIZE / dist);
+					velocity.z = velocity.z + (diff.z * DROP_PHYSIC_SIZE / dist);
+				}
+			}
+		}
+		drop->setVelocity(velocity);
 		drop->setPos(pos);
 	}
 }
