@@ -137,11 +137,12 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = DROP_PHYSIC_SIZE; x < size; x += 10) {
-		for (float y = DROP_PHYSIC_SIZE; y < size; y += 10) {
-			drops->insert(new Drop(glm::vec3(x, size, y)));
-		}
-	}
+	// for (float x = DROP_PHYSIC_SIZE; x < size; x += 10) {
+	// 	for (float y = DROP_PHYSIC_SIZE; y < size; y += 10) {
+			drops->insert(new Drop(glm::vec3(0, size, 0)));
+			drops->insert(new Drop(glm::vec3(10, size, 10)));
+	// 	}
+	// }
 }
 
 void	Context::initProjection() {
