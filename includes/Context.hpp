@@ -22,6 +22,7 @@
 namespace Context {
 	extern float	deltaTime;
 	extern float	lastFrame;
+	extern short	fps;
 
 	extern int		size;
 	extern float	**map;

@@ -19,9 +19,11 @@
 #include "Octree.hpp"
 
 #include <iostream>
+#include <string>
 
 float	Context::deltaTime = 0.0f;
 float	Context::lastFrame = 0.0f;
+short	Context::fps = 0;
 
 int		Context::size = 0;
 float	**Context::map;
@@ -156,10 +158,34 @@ bool    Context::shouldClose() {
 	return glfwWindowShouldClose(window);
 }
 
+static short		median(std::vector<short> scores)
+{
+	short		median;
+	size_t	size = scores.size();
+
+	sort(scores.begin(), scores.end());
+
+	if (size % 2 == 0) {
+		median = (scores[size / 2 - 1] + scores[size / 2]) / 2;
+	}
+	else {
+		median = scores[size / 2];
+	}
+	return median;
+}
+
 void	Context::update() {
+	static std::vector<short>		fpss;
+
 	GLfloat currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
+
+	fpss.push_back(static_cast<short>(1.0f / deltaTime));
+	if (fpss.size() > 10)
+		fpss.erase(++fpss.begin());
+	fps = median(fpss);
+
 	// deltaTime *= 0.5f;
 	glfwPollEvents();
 	inputManager->update(deltaTime);
@@ -189,6 +215,8 @@ void	Context::update() {
 }
 
 void	Context::draw() {
+	glfwSetWindowTitle(window, std::to_string(fps).c_str());
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = camera->GetViewMatrix();
