@@ -134,8 +134,8 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = DROP_PHYSIC_SIZE; x < size; x += 50) {
-		for (float y = DROP_PHYSIC_SIZE; y < size; y += 50) {
+	for (float x = DROP_PHYSIC_SIZE; x < size; x += 10) {
+		for (float y = DROP_PHYSIC_SIZE; y < size; y += 10) {
 			drops->push_back(Drop(glm::vec3(x, size, y)));
 			// drops->push_back(Drop(glm::vec3(4, 0, 5)));
 		}

@@ -170,7 +170,7 @@ void 	hill( float **map, int size, int x, int y, int zin ) {
 		while (ix < x + rayon) {
 			int iy = y - rayon;
 			while (iy < y + rayon) {
-				if ( ix >= 0 and iy > 0 and ix < size and iy < size
+				if ( ix >= 0 and iy >= 0 and ix < size and iy < size
 					and (ix - x)*(ix - x) + (iy - y)*(iy - y) < (rayon*rayon)
 					and map[ix][iy] < z)
 					map[ix][iy] = z;

@@ -120,9 +120,9 @@ void		Drop::update(std::vector<Drop> *drops, float dt) {
 
 				if (dist < DROP_PHYSIC_SIZE) {
 					// std::cout << dist << std::endl;
-					velocity.x = velocity.x + (diff.x * DROP_PHYSIC_SIZE / dist);
-					velocity.y = velocity.y + (diff.y * DROP_PHYSIC_SIZE / dist);
-					velocity.z = velocity.z + (diff.z * DROP_PHYSIC_SIZE / dist);
+					velocity.x = velocity.x + (diff.x * DROP_PHYSIC_SIZE / dist) * 0.1f;
+					velocity.y = velocity.y + (diff.y * DROP_PHYSIC_SIZE / dist) * 0.1f;
+					velocity.z = velocity.z + (diff.z * DROP_PHYSIC_SIZE / dist) * 0.1f;
 				}
 			}
 		}
