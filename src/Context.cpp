@@ -221,10 +221,15 @@ void	Context::draw() {
 
 	glm::mat4 view = camera->GetViewMatrix();
 
+	glm::mat4 model;
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	glm::mat4 MVP = projection * view * model;
+
 	renderer->getLandShader()->Use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 	renderer->getSphereShader()->Use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 	landMesh->render(renderer->getLandShader());
 	particleMesh->render(renderer->getSphereShader(), drops->count);
 
