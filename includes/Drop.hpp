@@ -21,6 +21,10 @@
 
 # include <vector>
 
+# include "Octree.hpp"
+
+class	Octree;
+
 class	Drop {
 private:
 	glm::vec3	_pos;
@@ -35,7 +39,7 @@ public:
 	void		setPos(glm::vec3 pos);
 	void		setVelocity(glm::vec3 v);
 
-	static void		update(std::vector<Drop> *drops, float dt);
+	static void		update(Octree *dropsOctree, float dt);
 };
 
 #endif

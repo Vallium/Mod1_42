@@ -102,12 +102,6 @@ void	Mesh::render(Shader *shader) {
 void	Mesh::render(Shader *shader, unsigned int instances) {
 	if (_vertexBuffer == nullptr or _instanceBuffer == nullptr)
 		return;
-	shader->Use();
-
-	glm::mat4 model;
-
-	model = glm::translate(model, _pos);
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 
 	glBindVertexArray(_VAO);
 	if (_elementBuffer == nullptr)

@@ -22,7 +22,8 @@ SRC			=	main.cpp		\
 				InputManager.cpp	\
 				map.cpp			\
 				Drop.cpp		\
-				sphere.cpp
+				sphere.cpp		\
+				Octree.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src
