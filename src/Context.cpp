@@ -146,10 +146,6 @@ void	Context::initWorld() {
 
 void	Context::initProjection() {
 	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
-	renderer->getLandShader()->Use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	renderer->getSphereShader()->Use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 

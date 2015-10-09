@@ -41,18 +41,18 @@ void		Drop::update(Octree *dropsOctree, float dt) {
 	std::vector<Drop*> drops;
 
 	dropsOctree->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), drops);
-	for (auto drop = drops.begin(); drop != drops.end(); ++drop) {
-		glm::vec3 velocity = (*drop)->getVelocity();
-		velocity += glm::vec3(0.0f, -1.4f * dt, 0.0f);
-		velocity.x = velocity.x - (velocity.x * 0.2f * dt);
-		velocity.y = velocity.y - (velocity.y * 0.2f * dt);
-		velocity.z = velocity.z - (velocity.z * 0.2f * dt);
-		(*drop)->setVelocity(velocity);
-	}
 
 	for (auto drop = drops.begin(); drop != drops.end(); ++drop) {
+		// Velocity update
+		glm::vec3 velocity = (*drop)->getVelocity();
+		velocity += glm::vec3(0.0f, -1.4f * dt, 0.0f); // Gravity
+		velocity.x = velocity.x - (velocity.x * 0.2f * dt); // Friction
+		velocity.y = velocity.y - (velocity.y * 0.2f * dt); // Friction
+		velocity.z = velocity.z - (velocity.z * 0.2f * dt); // Friction
+
 		glm::vec3 pos = (*drop)->getPos();
-		pos = (pos + (*drop)->getVelocity());
+		pos += velocity;
+
 		int x = static_cast<int>(pos.x);
 		int z = static_cast<int>(pos.z);
 
@@ -71,11 +71,8 @@ void		Drop::update(Octree *dropsOctree, float dt) {
 
 		float y = (y1 + y2 + y3) / 3.00f;
 
-		glm::vec3	velocity = (*drop)->getVelocity();
-
 		if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
 			glm::vec3	n;
-
 
 			velocity.x = -velocity.x * 0.5f;
 			velocity.y = -velocity.y * 0.5f;
