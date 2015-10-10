@@ -18,6 +18,8 @@
 # define RENDER_SIZE 100.0f
 
 # include <vector>
+# include <string>
+# include <algorithm>
 
 # define GLEW_STATIC
 # include <GL/glew.h>

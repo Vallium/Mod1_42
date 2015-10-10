@@ -32,8 +32,17 @@ STATIC_DIR	= static
 DEP_DIR		= dep
 
 
-INCLUDES	= -I glfw/include -I glm/ -I glew/include
-LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -ldl
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+	INCLUDES	=
+	LIBS		= -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -lGLEW -ldl -lm -lXinerama -lXcursor -lrt -lm
+endif
+
+ifeq ($(UNAME_S),Darwin)
+	INCLUDES	= -I glfw/include -I glm/ -I glew/include
+	LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -ldl
+endif
 
 OBJ			= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
 OBJ_DEBUG	= $(patsubst %.cpp,$(DEBUG_DIR)/%.o,$(SRC))
