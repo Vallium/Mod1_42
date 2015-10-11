@@ -119,7 +119,7 @@ void	Context::initRenderer() {
 
 }
 
-#define NB_DROPS 100.0f
+#define NB_DROPS 20.0f
 
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(-RENDER_SIZE / 2.0f, RENDER_SIZE, -RENDER_SIZE / 2.0f));
@@ -136,18 +136,20 @@ void	Context::initWorld() {
 	unsigned int particleElementBufferSize;
 	GLfloat		*particleVertexBuffer = nullptr;
 	GLuint		*particleElementBuffer = nullptr;
-	generateCubeMesh(DROP_RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
+	generateCubeMesh(DROP_RENDER_SIZE / static_cast<float>(size) * RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
 	for (float x = 0; x < NB_DROPS; x++) {
 		for (float y = 0; y < NB_DROPS; y++) {
-			drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, size, y * size / NB_DROPS)));
+			for (float z = 0; z < NB_DROPS; z++) {
+				drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, y * size / NB_DROPS, z * size / NB_DROPS)));
+			}
 		}
 	}
 
-	// drops->insert(new Drop(glm::vec3(10, size, 10)));
-	// drops->insert(new Drop(glm::vec3(5, size, 5)));
+	// drops->insert(new Drop(glm::vec3(2, 500, 1)));
+	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
 }
 
 void	Context::initProjection() {

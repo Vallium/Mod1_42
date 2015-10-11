@@ -117,14 +117,21 @@ void		Drop::update(Octree *dropsOctree, float dt) {
 		for (auto drop2 = dropsNear.begin(); drop2 != dropsNear.end(); ++drop2) {
 			glm::vec3 pos2 = (*drop2)->getPos();
 			if (pos != pos2) {
-				glm::vec3	diff = pos - pos2;
-				float	dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
+				glm::vec3       diff(pos2.x - pos.x, pos2.y - pos.y, pos2.z - pos.z);
 
+				float	dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
 				if (dist < DROP_PHYSIC_SIZE) {
-					std::cout << dist << std::endl;
-					velocity.x = velocity.x + (diff.x * DROP_PHYSIC_SIZE / dist) * 1.0f;
-					velocity.y = velocity.y + (diff.y * DROP_PHYSIC_SIZE / dist) * 1.0f;
-					velocity.z = velocity.z + (diff.z * DROP_PHYSIC_SIZE / dist) * 1.0f;
+					// std::cout << dist << std::endl;
+					glm::vec3	velocity2 = (*drop2)->getVelocity();
+					velocity.x = (velocity.x + velocity2.x) / 2 * DROP_COLLIDE_COEF;
+					velocity.y = (velocity.y + velocity2.y) / 2 * DROP_COLLIDE_COEF;
+					velocity.z = (velocity.z + velocity2.z) / 2 * DROP_COLLIDE_COEF;
+
+					diff = glm::normalize(diff);
+
+					pos.x -= diff.x * (DROP_PHYSIC_SIZE - dist);
+					pos.y -= diff.y * (DROP_PHYSIC_SIZE - dist);
+					pos.z -= diff.z * (DROP_PHYSIC_SIZE - dist);
 				}
 			}
 		}
