@@ -15,6 +15,8 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <string>
+#include <algorithm>
 
 GLfloat		*generateLandMesh(float **map, int size, unsigned int &bufferSize) {
 	float ratio = RENDER_SIZE / static_cast<float>(size);
@@ -135,7 +137,7 @@ float		**create_tab(std::vector<int> &pts, int &size) {
 
 	int		pd = pts[0];
 
-	for (int i = 0; i < pts.size(); i += 3) {
+	for (unsigned int i = 0; i < pts.size(); i += 3) {
 		pd = pgcd(pd, pts[i]);
 		pd = pgcd(pd, pts[i + 1]);
 		pd = pgcd(pd, pts[i + 2]);
@@ -153,7 +155,7 @@ float		**create_tab(std::vector<int> &pts, int &size) {
 		}
 	}
 
-	for (int i = 0; i < pts.size(); i += 3) {
+	for (unsigned int i = 0; i < pts.size(); i += 3) {
 		pts[i] = pts[i] * size / BASE_SIZE;
 		pts[i + 1] = pts[i + 1] * size / BASE_SIZE;
 		pts[i + 2] = pts[i + 2] * size / BASE_SIZE;
@@ -185,7 +187,7 @@ void 	hill( float **map, int size, int x, int y, int zin ) {
 
 
 void		errect_hills(float **tab, int size, std::vector<int> pts) {
-	for (int i = 0; i < pts.size(); i += 3) {
+	for (unsigned int i = 0; i < pts.size(); i += 3) {
 		hill(tab, size, pts[i], pts[i + 1], pts[i + 2]);
 	}
 }

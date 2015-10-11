@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 float	Context::deltaTime = 0.0f;
 float	Context::lastFrame = 0.0f;
