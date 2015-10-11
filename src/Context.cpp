@@ -118,6 +118,8 @@ void	Context::initRenderer() {
 
 }
 
+#define NB_DROPS 100.0f
+
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(-RENDER_SIZE / 2.0f, RENDER_SIZE, -RENDER_SIZE / 2.0f));
 	landMesh = new Mesh();
@@ -137,12 +139,14 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	// for (float x = DROP_PHYSIC_SIZE; x < size; x += 10) {
-	// 	for (float y = DROP_PHYSIC_SIZE; y < size; y += 10) {
-			drops->insert(new Drop(glm::vec3(0, size, 0)));
-			drops->insert(new Drop(glm::vec3(10, size, 10)));
-	// 	}
-	// }
+	for (float x = 0; x < NB_DROPS; x++) {
+		for (float y = 0; y < NB_DROPS; y++) {
+			drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, size, y * size / NB_DROPS)));
+		}
+	}
+
+	// drops->insert(new Drop(glm::vec3(10, size, 10)));
+	// drops->insert(new Drop(glm::vec3(5, size, 5)));
 }
 
 void	Context::initProjection() {
@@ -201,13 +205,14 @@ void	Context::update() {
 		tmp[i++] = (*it)->getPos().y / static_cast<float>(size) * RENDER_SIZE;
 		tmp[i++] = (*it)->getPos().z / static_cast<float>(size) * RENDER_SIZE;
 	}
+	// std::cout << drops->count << std::endl;
 
 	GLfloat		*tmpPtr = particleMesh->getInstanceBuffer();
 
 	if (tmpPtr != nullptr)
 		delete [] tmpPtr;
 
-	particleMesh->setInstanceBuffer(tmp, tmpSize);
+	particleMesh->setInstanceBuffer(tmp, i);
 }
 
 void	Context::draw() {
