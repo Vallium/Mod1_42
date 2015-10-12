@@ -33,6 +33,7 @@ private:
 
 public:
 	Drop(glm::vec3 pos);
+	Drop(Drop const &cpy);
 
 	glm::vec3	getPos(void) const;
 	glm::vec3	getVelocity(void) const;
@@ -40,7 +41,7 @@ public:
 	void		setPos(glm::vec3 pos);
 	void		setVelocity(glm::vec3 v);
 
-	static void		update(Octree *dropsOctree, float dt);
+	static std::vector<Drop*>		update(Octree **dropsOctree, float dt);
 };
 
 #endif

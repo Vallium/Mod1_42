@@ -140,15 +140,15 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = 0; x < NB_DROPS; x++) {
-		for (float y = 0; y < NB_DROPS; y++) {
-			for (float z = 0; z < NB_DROPS; z++) {
-				drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, y * size / NB_DROPS, z * size / NB_DROPS)));
-			}
-		}
-	}
+	// for (float x = 0; x < NB_DROPS; x++) {
+	// 	for (float y = 0; y < NB_DROPS; y++) {
+	// 		// for (float z = 0; z < NB_DROPS; z++) {
+	// 			drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, size, y * size / NB_DROPS)));
+	// 		// }
+	// 	}
+	// }
 
-	// drops->insert(new Drop(glm::vec3(2, 500, 1)));
+	drops->insert(new Drop(glm::vec3(250, 200, 200)));
 	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
 }
 
@@ -194,11 +194,11 @@ void	Context::update() {
 	inputManager->update(deltaTime);
 	// world->update(deltaTime);
 
-	Drop::update(drops, deltaTime);
+	// Drop::update(&drops, deltaTime);
 
-	std::vector<Drop*> dropsTmp;
+	std::vector<Drop*> dropsTmp = Drop::update(&drops, deltaTime);
 
-	drops->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), dropsTmp);
+	// drops->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), dropsTmp);
 
 	unsigned int tmpSize = dropsTmp.size() * 3;
 	GLfloat		*tmp = new float[tmpSize];
@@ -216,6 +216,18 @@ void	Context::update() {
 		delete [] tmpPtr;
 
 	particleMesh->setInstanceBuffer(tmp, i);
+
+	Octree	*tmpPtr2;
+
+	Octree::count = 0;
+	Octree	*tmpPtr3 = new Octree(glm::vec3(size / 2, size / 2, size / 2), glm::vec3(size / 2, size / 2, size / 2));
+
+	tmpPtr2 = drops;
+	drops = tmpPtr3;
+	delete tmpPtr2;
+
+	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it)
+		drops->insert(*it);
 }
 
 void	Context::draw() {

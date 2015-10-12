@@ -44,7 +44,7 @@ bool		Octree::isLeafNode() const {
 	// all eight, it is sufficient to just check the first.
 	return children[0] == NULL;
 }
-
+#include <iostream>
 void		Octree::insert(Drop* point) {
 	// If this node doesn't have a data point yet assigned
 	// and it is a leaf, then we're done!
@@ -80,7 +80,8 @@ void		Octree::insert(Drop* point) {
 			// Re-insert the old point, and insert this new point
 			// (We wouldn't need to insert from the root, because we already
 			// know it's guaranteed to be in this section of the tree)
-			children[getOctantContainingPoint(oldPoint->getPos())]->insert(oldPoint);
+			if (oldPoint->getPos() != point->getPos())
+				children[getOctantContainingPoint(oldPoint->getPos())]->insert(oldPoint);
 			children[getOctantContainingPoint(point->getPos())]->insert(point);
 		}
 	}
