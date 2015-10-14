@@ -1,14 +1,14 @@
 #include "MapRenderer.hpp"
 
-MapRenderer() : _generated(false) {
+MapRenderer::MapRenderer() : _generated(false) {
 	_mesh = new Mesh();
 }
 
-~MapRenderer() {
+MapRenderer::~MapRenderer() {
 	delete _mesh;
 }
 
-void	generateMesh(Map *map) {
+void	MapRenderer::generateMesh(Map *map) {
 	_generated = true;
 
 	int		bufferSize = MAP_RENDERER_LOD * MAP_RENDERER_LOD * 6 * 6;
@@ -17,8 +17,8 @@ void	generateMesh(Map *map) {
 	float step = 20000.0f / MAP_RENDERER_LOD;
 
 	unsigned int i = 0;
-	for (float x = -10000.0f; x < 10000.0f; x += step) {
-		for (float z = -10000.0f; z < 10000.0f; z += step) {
+	for (float x = 0.0f; x < 20000.0f; x += step) {
+		for (float z = 0.0f; z < 20000.0f; z += step) {
 			buffer[i++] = x;
 			buffer[i++] = map->interpolate(x, z);
 			buffer[i++] = z;
@@ -66,7 +66,7 @@ void	generateMesh(Map *map) {
 	_mesh->setVertexBuffer(buffer, bufferSize);
 }
 
-void	render(Renderer *r) {
+void	MapRenderer::render(Renderer *r) {
 	if (_generated)
-		_mesh->render(r);
+		_mesh->render(r->getLandShader());
 }

@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include "Camera.hpp"
-#include "map.hpp"
+#include "Renderer.hpp"
 
-#define GLM_FORCE_RADIANS
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,14 +22,14 @@
 Camera::Camera(glm::vec3 p)
 {
 	_pos = p;
-	_front = glm::normalize(glm::vec3(RENDER_SIZE / 2.0f, 0, RENDER_SIZE / 2.0f) - _pos);
+	_front = glm::normalize(glm::vec3(0, 0, 0) - _pos);
 	_up = glm::vec3(0.0f, 1.0f,  0.0f);
 
 	_yaw = 0.0f;
 	_pitch = 0.0f;
 	_zoom = 45.0f;
 
-	_speed = 60.0f;
+	_speed = 10000.0f;
 }
 
 void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
@@ -61,7 +60,7 @@ void	Camera::ProcessKeyboard(enum Direction dir, GLfloat dt)
 			_speed--;
 			break;
 	}
-	_front = glm::normalize(glm::vec3(RENDER_SIZE / 2.0f, 0, RENDER_SIZE / 2.0f) - _pos);
+	_front = glm::normalize(glm::vec3(0, 0, 0) - _pos);
 }
 
 void	Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset)

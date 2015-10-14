@@ -5,8 +5,12 @@
 # include <vector>
 
 # include "Mesh.hpp"
+# include "Map.hpp"
+# include "Renderer.hpp"
 
 # define MAP_RENDERER_LOD 100
+
+class Map;
 
 class		MapRenderer {
 private:

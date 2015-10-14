@@ -13,12 +13,10 @@
 #ifndef CAMERA_HPP
 # define CAMERA_HPP
 
-# define GLM_FORCE_RADIANS
 # include <glm/glm.hpp>
 # include <glm/gtc/matrix_transform.hpp>
 # include <string>
 # include <vector>
-// # include <SOIL/SOIL.h>
 
 # define GLEW_STATIC
 # include <GL/glew.h>

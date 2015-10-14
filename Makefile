@@ -14,13 +14,15 @@ NAME		= mod1
 NAME_DEBUG	= mod1_debug
 
 SRC			=	main.cpp		\
+				parse.cpp		\
 				Camera.cpp		\
 				Renderer.cpp	\
 				Mesh.cpp		\
 				Shader.cpp		\
 				Context.cpp		\
 				InputManager.cpp	\
-				map.cpp			\
+				Map.cpp			\
+				MapRenderer.cpp			\
 				Drop.cpp		\
 				sphere.cpp		\
 				Octree.cpp

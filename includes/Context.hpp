@@ -2,7 +2,6 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-#define GLM_FORCE_RADIANS
 
 #include <GLFW/glfw3.h>
 
@@ -18,6 +17,7 @@
 #include "Drop.hpp"
 #include "Octree.hpp"
 
+#include "Map.hpp"
 
 namespace Context {
 	extern float	deltaTime;
@@ -25,17 +25,15 @@ namespace Context {
 	extern short	fps;
 
 	extern int		size;
-	extern float	**map;
 
 	extern GLFWwindow	*window;
 
 	extern int		windowWidth;
 	extern int		windowHeight;
 
+	extern Map				*map;
 	extern Renderer 		*renderer;
-	extern Mesh				*landMesh;
 	extern Mesh				*particleMesh;
-	// extern Skybox 			*skybox;
 	extern Octree			*drops;
 	extern Camera 			*camera;
 	extern InputManager 	*inputManager;

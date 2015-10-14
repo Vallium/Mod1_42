@@ -51,20 +51,12 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		glm::vec3 velocity = (*drop)->getVelocity();
 
 		// Apply gravity
-		velocity += glm::vec3(0.0f, (-9.81f * Context::size / 150.0f) * dt, 0.0f);
-
-		//Get map X and Z
-		int x = static_cast<int>(pos.x);
-		int z = static_cast<int>(pos.z);
-		if (x < 0) x = 0;
-		else if (x >= Context::size) x = Context::size - 1;
-		if (z < 0) z = 0;
-		else if (z >= Context::size) z = Context::size - 1;
+		velocity += glm::vec3(0.0f, (-9.81f * 100.0f) * dt, 0.0f);
 
 		//Interpolate map Y
-		float y1 = static_cast<float>(Context::map[x][z]);
-		float y2 = x + 1 < Context::size ? static_cast<float>(Context::map[x + 1][z]) : 0;
-		float y3 = z + 1 < Context::size ? static_cast<float>(Context::map[x][z + 1]) : 0;
+		float y1 = Context::map->interpolate(pos.x, pos.z);
+		float y2 = Context::map->interpolate(pos.x + 1.0f, pos.z);
+		float y3 = Context::map->interpolate(pos.x, pos.z + 1.0f);
 		float y = (y1 + y2 + y3) / 3.00f;
 
 

@@ -4,6 +4,11 @@
 # include <glm/glm.hpp>
 # include <vector>
 
+# include "MapRenderer.hpp"
+# include "Renderer.hpp"
+
+class MapRenderer;
+
 class	Map {
 private:
 	std::vector<glm::vec3>		_points;

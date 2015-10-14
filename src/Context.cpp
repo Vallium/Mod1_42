@@ -4,7 +4,6 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-#define GLM_FORCE_RADIANS
 
 #include <GLFW/glfw3.h>
 
@@ -18,6 +17,8 @@
 #include "InputManager.hpp"
 #include "Octree.hpp"
 
+#include "parse.hpp"
+
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -26,10 +27,9 @@ float	Context::deltaTime = 0.0f;
 float	Context::lastFrame = 0.0f;
 short	Context::fps = 0;
 
-int		Context::size = 0;
-float	**Context::map;
-
 GLFWwindow* Context::window;
+
+int 	Context::size = 20000;
 
 // iMac 42
 int		Context::windowWidth = 1920;
@@ -39,9 +39,9 @@ int		Context::windowHeight = 1080;
 // int		Context::windowWidth = 1440;
 // int		Context::windowHeight = 900;
 
+Map				*Context::map;
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
-Mesh			*Context::landMesh;
 Mesh			*Context::particleMesh;
 InputManager	*Context::inputManager;
 Octree			*Context::drops;
@@ -49,26 +49,14 @@ Octree			*Context::drops;
 glm::mat4		Context::projection;
 
 void    Context::init(int ac, char **av) {
-	initMap(ac, av);
 	initGLFW();
 	initOGL();
 	initRenderer();
+	initMap(ac, av);
 	initWorld();
 	initProjection();
 }
 
-void	Context::initMap(int ac, char **av) {
-	if (ac != 2) {
-		std::cout << "Put a file motherfucker!!" <<std::endl;
-		exit(-1);
-	}
-	else {
-		std::vector<int> pts = parse(std::string(av[1]));
-		map = create_tab(pts, size);
-
-		errect_hills(map, size, pts);
-	}
-}
 
 void	Context::initGLFW() {
 	if (!glfwInit())
@@ -119,24 +107,37 @@ void	Context::initRenderer() {
 
 }
 
+void	Context::initMap(int ac, char **av) {
+	if (ac != 2) {
+		std::cout << "Put a file motherfucker!!" <<std::endl;
+		exit(-1);
+	}
+	else {
+		std::vector<glm::vec3> pts = parse(std::string(av[1]));
+		map = new Map();
+
+		for (auto it = pts.begin(); it != pts.end(); ++it) {
+			map->addPoint(*it);
+			std::cout << it->x << " " << it->y << " " << it->z << std::endl;
+		}
+
+	}
+}
 #define NB_DROPS 20.0f
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(-RENDER_SIZE / 2.0f, RENDER_SIZE, -RENDER_SIZE / 2.0f));
-	landMesh = new Mesh();
+	camera = new Camera(glm::vec3(15000, 15000, 15000));
 	particleMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
-	drops = new Octree(glm::vec3(size / 2, size / 2, size / 2), glm::vec3(size / 2, size / 2, size / 2));
+	drops = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
 
-	unsigned int landVertexBufferSize;
-	GLfloat		*landVertexBuffer = generateLandMesh(map, size, landVertexBufferSize);
-	landMesh->setVertexBuffer(landVertexBuffer, landVertexBufferSize);
+	map->generateMesh();
 
 	unsigned int particleVertexBufferSize;
 	unsigned int particleElementBufferSize;
 	GLfloat		*particleVertexBuffer = nullptr;
 	GLuint		*particleElementBuffer = nullptr;
-	generateCubeMesh(DROP_RENDER_SIZE / static_cast<float>(size) * RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
+	generateCubeMesh(DROP_RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
@@ -148,12 +149,12 @@ void	Context::initWorld() {
 	// 	}
 	// }
 
-	drops->insert(new Drop(glm::vec3(250, size, 200)));
+	drops->insert(new Drop(glm::vec3(250, 15000, 200)));
 	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
 }
 
 void	Context::initProjection() {
-	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 10000.0f);
+	projection = glm::perspective(45.0f, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.01f, 1000000.0f);
 }
 
 
@@ -204,9 +205,9 @@ void	Context::update() {
 	GLfloat		*tmp = new float[tmpSize];
 	unsigned int i = 0;
 	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it) {
-		tmp[i++] = (*it)->getPos().x / static_cast<float>(size) * RENDER_SIZE;
-		tmp[i++] = (*it)->getPos().y / static_cast<float>(size) * RENDER_SIZE;
-		tmp[i++] = (*it)->getPos().z / static_cast<float>(size) * RENDER_SIZE;
+		tmp[i++] = (*it)->getPos().x;
+		tmp[i++] = (*it)->getPos().y;
+		tmp[i++] = (*it)->getPos().z;
 	}
 	// std::cout << drops->count << std::endl;
 
@@ -220,7 +221,7 @@ void	Context::update() {
 	Octree	*tmpPtr2;
 
 	Octree::count = 0;
-	Octree	*tmpPtr3 = new Octree(glm::vec3(size / 2, size / 2, size / 2), glm::vec3(size / 2, size / 2, size / 2));
+	Octree	*tmpPtr3 = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
 
 	tmpPtr2 = drops;
 	drops = tmpPtr3;
@@ -244,9 +245,9 @@ void	Context::draw() {
 
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	map->render(renderer);
 	renderer->getSphereShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-	landMesh->render(renderer->getLandShader());
 	particleMesh->render(renderer->getSphereShader(), drops->count);
 
 	// Swap the buffers
@@ -256,7 +257,6 @@ void	Context::draw() {
 void	Context::deinit() {
 	delete renderer;
 	delete inputManager;
-	delete landMesh;
 	delete particleMesh;
 
 	//TODO: Properly de-allocate all resources once they've outlived their purpose
