@@ -47,78 +47,91 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 	(*dropsOctree)->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), drops);
 
 	for (auto drop = drops.begin(); drop != drops.end(); ++drop) {
-		// Velocity update
+		glm::vec3 pos = (*drop)->getPos();
 		glm::vec3 velocity = (*drop)->getVelocity();
-		velocity += glm::vec3(0.0f, -1.4f * dt, 0.0f); // Gravity
+
+		// Apply gravity
+		velocity += glm::vec3(0.0f, (-9.81f * Context::size / 150.0f) * dt, 0.0f);
+
+		//Get map X and Z
+		int x = static_cast<int>(pos.x);
+		int z = static_cast<int>(pos.z);
+		if (x < 0) x = 0;
+		else if (x >= Context::size) x = Context::size - 1;
+		if (z < 0) z = 0;
+		else if (z >= Context::size) z = Context::size - 1;
+
+		//Interpolate map Y
+		float y1 = static_cast<float>(Context::map[x][z]);
+		float y2 = x + 2 < Context::size ? static_cast<float>(Context::map[x + 2][z]) : 0;
+		float y3 = z + 2 < Context::size ? static_cast<float>(Context::map[x][z + 2]) : 0;
+		float y = (y1 + y2 + y3) / 3.00f;
+
+
+		//Collision
+		if (pos.y + velocity.y * dt <= y) {
+			velocity.y = -velocity.y * 0.5f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
+			if (pos.y + velocity.y < y) {
+				glm::vec3	u(1, y2 - y1, 0);
+				glm::vec3	v(0, y3 - y1, 1);
+				glm::vec3	n = glm::normalize(glm::cross(v, u));
+				velocity = glm::rotate(velocity, 180.0f, n);
+			}
+		}
+
+		//Apply friction to velocity
 		velocity.x = velocity.x - (velocity.x * 0.1f * dt); // Friction
 		velocity.y = velocity.y - (velocity.y * 0.1f * dt); // Friction
 		velocity.z = velocity.z - (velocity.z * 0.1f * dt); // Friction
 
-		glm::vec3 pos = (*drop)->getPos();
-		pos += velocity;
+		//Set new pos and velocity
+		(*drop)->setPos(pos + velocity * dt);
+		(*drop)->setVelocity(velocity);
 
-		int x = static_cast<int>(pos.x);
-		int z = static_cast<int>(pos.z);
-
-		if (x < 0)
-			x = 0;
-		else if (x >= Context::size)
-			x = Context::size - 1;
-		if (z < 0)
-			z = 0;
-		else if (z >= Context::size)
-			z = Context::size - 1;
-
-		float y1 = static_cast<float>(Context::map[x][z]);
-		float y2 = x + 2 < Context::size ? static_cast<float>(Context::map[x + 2][z]) : 0;
-		float y3 = z + 2 < Context::size ? static_cast<float>(Context::map[x][z + 2]) : 0;
-
-		float y = (y1 + y2 + y3) / 3.00f;
-
-		if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
-			glm::vec3	n;
-
-
-			if (pos.y < y) {
-				std::cout << y << std::endl;
-				velocity.y = -velocity.y * 0.5f;
-				pos.y = y;
-				glm::vec3	u(1, y2 - y1, 0);
-				glm::vec3	v(0, y3 - y1, 1);
-				n = glm::normalize(glm::cross(v, u));
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-
-			if (pos.x >= Context::size) {
-				velocity.x = -velocity.x * 0.5f;
-				pos.x = Context::size - 1;
-				n = glm::vec3(-1, 0, 0);
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-			else if (pos.x < 0) {
-				velocity.x = -velocity.x * 0.5f;
-
-				pos.x = 0;
-				n = glm::vec3(1, 0, 0);
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-
-			if (pos.z >= Context::size) {
-				velocity.z = -velocity.z * 0.5f;
-				pos.z = Context::size - 1;
-				n = glm::vec3(0, 0, -1);
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-			else if (pos.z < 0) {
-				velocity.z = -velocity.z * 0.5f;
-
-				pos.z = 0;
-				n = glm::vec3(0, 0, 1);
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
-			(*drop)->setVelocity(velocity);
-		}
-		(*drop)->setPos(pos);
+		// if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
+		// 	glm::vec3	n;
+		//
+		// 	velocity.y = -velocity.y * 0.5f;
+		// 	velocity.x = -velocity.x * 0.5f;
+		// 	velocity.z = -velocity.z * 0.5f;
+		// 	if (pos.y + velocity.y < y) {
+		// 		glm::vec3	u(1, y2 - y1, 0);
+		// 		glm::vec3	v(0, y3 - y1, 1);
+		// 		n = glm::normalize(glm::cross(v, u));
+		// 		velocity = glm::rotate(velocity, 180.0f, n);
+		// 		if (pos.y + velocity.y < y) {
+		// 			pos.y = y;
+		// 		}
+		// 	}
+		//
+		// 	if (pos.x >= Context::size) {
+		// 		pos.x = Context::size - 1;
+		// 		n = glm::vec3(-1, 0, 0);
+		// 		velocity = glm::rotate(velocity, 180.0f, n);
+		// 	}
+		// 	else if (pos.x < 0) {
+		//
+		// 		pos.x = 0;
+		// 		n = glm::vec3(1, 0, 0);
+		// 		velocity = glm::rotate(velocity, 180.0f, n);
+		// 	}
+		//
+		// 	if (pos.z >= Context::size) {
+		// 		pos.z = Context::size - 1;
+		// 		n = glm::vec3(0, 0, -1);
+		// 		velocity = glm::rotate(velocity, 180.0f, n);
+		// 	}
+		// 	else if (pos.z < 0) {
+		//
+		// 		pos.z = 0;
+		// 		n = glm::vec3(0, 0, 1);
+		// 		velocity = glm::rotate(velocity, 180.0f, n);
+		// 	}
+		// 	(*drop)->setVelocity(velocity);
+		// }
+		// (*drop)->setPos(pos + velocity);
 
 		// std::vector<Drop*> dropsNear;
 		//
@@ -144,7 +157,7 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		// 		}
 		// 	}
 		// }
-		(*drop)->setVelocity(velocity);
+		// (*drop)->setVelocity(velocity);
 		// (*drop)->setPos(pos);
 	}
 	return drops;

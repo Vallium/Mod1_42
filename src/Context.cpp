@@ -148,7 +148,7 @@ void	Context::initWorld() {
 	// 	}
 	// }
 
-	drops->insert(new Drop(glm::vec3(250, 200, 200)));
+	drops->insert(new Drop(glm::vec3(250, size, 200)));
 	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
 }
 
