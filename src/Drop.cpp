@@ -63,8 +63,8 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 
 		//Interpolate map Y
 		float y1 = static_cast<float>(Context::map[x][z]);
-		float y2 = x + 2 < Context::size ? static_cast<float>(Context::map[x + 2][z]) : 0;
-		float y3 = z + 2 < Context::size ? static_cast<float>(Context::map[x][z + 2]) : 0;
+		float y2 = x + 1 < Context::size ? static_cast<float>(Context::map[x + 1][z]) : 0;
+		float y3 = z + 1 < Context::size ? static_cast<float>(Context::map[x][z + 1]) : 0;
 		float y = (y1 + y2 + y3) / 3.00f;
 
 
@@ -73,12 +73,46 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 			velocity.y = -velocity.y * 0.5f;
 			velocity.x = -velocity.x * 0.5f;
 			velocity.z = -velocity.z * 0.5f;
-			if (pos.y + velocity.y < y) {
-				glm::vec3	u(1, y2 - y1, 0);
-				glm::vec3	v(0, y3 - y1, 1);
-				glm::vec3	n = glm::normalize(glm::cross(v, u));
-				velocity = glm::rotate(velocity, 180.0f, n);
-			}
+
+			glm::vec3	u(1, y2 - y1, 0);
+			glm::vec3	v(0, y3 - y1, 1);
+			glm::vec3	n = glm::normalize(glm::cross(v, u));
+			velocity = glm::rotate(velocity, 180.0f, n);
+		}
+
+		if (pos.x + velocity.x * dt >= Context::size) {
+			velocity.y = -velocity.y * 0.5f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
+
+			glm::vec3	n = glm::vec3(-1, 0, 0);
+			velocity = glm::rotate(velocity, 180.0f, n);
+		}
+
+		else if (pos.x + velocity.x * dt < 0) {
+			velocity.y = -velocity.y * 0.5f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
+
+			glm::vec3	n = glm::vec3(1, 0, 0);
+			velocity = glm::rotate(velocity, 180.0f, n);
+		}
+
+		if (pos.z + velocity.z * dt >= Context::size) {
+			velocity.y = -velocity.y * 0.5f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
+
+			glm::vec3	n = glm::vec3(0, 0, -1);
+			velocity = glm::rotate(velocity, 180.0f, n);
+		}
+		else if (pos.z + velocity.z * dt < 0) {
+			velocity.y = -velocity.y * 0.5f;
+			velocity.x = -velocity.x * 0.5f;
+			velocity.z = -velocity.z * 0.5f;
+
+			glm::vec3	n = glm::vec3(0, 0, 1);
+			velocity = glm::rotate(velocity, 180.0f, n);
 		}
 
 		//Apply friction to velocity
