@@ -107,6 +107,28 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 			velocity = glm::rotate(velocity, 180.0f, n);
 		}
 
+		// Particles collide
+		std::vector<Drop*> dropsNear;
+		(*dropsOctree)->getPointsInsideBox(glm::vec3(pos.x - DROP_PHYSIC_SIZE, pos.y - DROP_PHYSIC_SIZE, pos.z - DROP_PHYSIC_SIZE), glm::vec3(pos.x + DROP_PHYSIC_SIZE, pos.y + DROP_PHYSIC_SIZE, pos.z + DROP_PHYSIC_SIZE), dropsNear);
+
+		for (auto drop2 = dropsNear.begin(); drop2 != dropsNear.end(); ++drop2) {
+			glm::vec3 pos2 = (*drop2)->getPos();
+			if (*drop != *drop2) {
+				glm::vec3       diffBefore(pos2.x - pos.x, pos2.y - pos.y, pos2.z - pos.z);
+				glm::vec3       diffAfter(pos2.x - pos.x + velocity.x * dt, pos2.y - pos.y + velocity.y * dt, pos2.z - pos.z + velocity.z * dt);
+
+				float	dist = sqrt(diffAfter.x * diffAfter.x + diffAfter.y * diffAfter.y + diffAfter.z * diffAfter.z);
+
+				if (dist < DROP_PHYSIC_SIZE) {
+					velocity.y = -velocity.y;
+					velocity.x = -velocity.x;
+					velocity.z = -velocity.z;
+
+					velocity = glm::rotate(velocity, 180.0f, diffBefore);
+				}
+			}
+		}
+
 		//Apply friction to velocity
 		velocity.x = velocity.x - (velocity.x * 0.1f * dt); // Friction
 		velocity.y = velocity.y - (velocity.y * 0.1f * dt); // Friction
@@ -116,89 +138,7 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		(*drop)->setPos(pos + velocity * dt);
 		(*drop)->setVelocity(velocity);
 
-		// if (pos.y < y or pos.x < 0 or pos.z < 0 or pos. x >= Context::size or pos.z >= Context::size) {
-		// 	glm::vec3	n;
-		//
-		// 	velocity.y = -velocity.y * 0.5f;
-		// 	velocity.x = -velocity.x * 0.5f;
-		// 	velocity.z = -velocity.z * 0.5f;
-		// 	if (pos.y + velocity.y < y) {
-		// 		glm::vec3	u(1, y2 - y1, 0);
-		// 		glm::vec3	v(0, y3 - y1, 1);
-		// 		n = glm::normalize(glm::cross(v, u));
-		// 		velocity = glm::rotate(velocity, 180.0f, n);
-		// 		if (pos.y + velocity.y < y) {
-		// 			pos.y = y;
-		// 		}
-		// 	}
-		//
-		// 	if (pos.x >= Context::size) {
-		// 		pos.x = Context::size - 1;
-		// 		n = glm::vec3(-1, 0, 0);
-		// 		velocity = glm::rotate(velocity, 180.0f, n);
-		// 	}
-		// 	else if (pos.x < 0) {
-		//
-		// 		pos.x = 0;
-		// 		n = glm::vec3(1, 0, 0);
-		// 		velocity = glm::rotate(velocity, 180.0f, n);
-		// 	}
-		//
-		// 	if (pos.z >= Context::size) {
-		// 		pos.z = Context::size - 1;
-		// 		n = glm::vec3(0, 0, -1);
-		// 		velocity = glm::rotate(velocity, 180.0f, n);
-		// 	}
-		// 	else if (pos.z < 0) {
-		//
-		// 		pos.z = 0;
-		// 		n = glm::vec3(0, 0, 1);
-		// 		velocity = glm::rotate(velocity, 180.0f, n);
-		// 	}
-		// 	(*drop)->setVelocity(velocity);
-		// }
-		// (*drop)->setPos(pos + velocity);
 
-		// std::vector<Drop*> dropsNear;
-		//
-		// (*dropsOctree)->getPointsInsideBox(glm::vec3(pos.x - DROP_PHYSIC_SIZE, pos.y - DROP_PHYSIC_SIZE, pos.z - DROP_PHYSIC_SIZE), glm::vec3(pos.x + DROP_PHYSIC_SIZE, pos.y + DROP_PHYSIC_SIZE, pos.z + DROP_PHYSIC_SIZE), dropsNear);
-		// for (auto drop2 = dropsNear.begin(); drop2 != dropsNear.end(); ++drop2) {
-		// 	glm::vec3 pos2 = (*drop2)->getPos();
-		// 	if (pos != pos2) {
-		// 		glm::vec3       diff(pos2.x - pos.x, pos2.y - pos.y, pos2.z - pos.z);
-		//
-		// 		float	dist = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
-		// 		if (dist < DROP_PHYSIC_SIZE) {
-		// 			// std::cout << dist << std::endl;
-		// 			glm::vec3	velocity2 = (*drop2)->getVelocity();
-		// 			velocity.x = (velocity.x + velocity2.x) / 2 * DROP_COLLIDE_COEF;
-		// 			velocity.y = (velocity.y + velocity2.y) / 2 * DROP_COLLIDE_COEF;
-		// 			velocity.z = (velocity.z + velocity2.z) / 2 * DROP_COLLIDE_COEF;
-		//
-		// 			diff = glm::normalize(diff);
-		//
-		// 			pos.x -= diff.x * (DROP_PHYSIC_SIZE - dist);
-		// 			pos.y -= diff.y * (DROP_PHYSIC_SIZE - dist);
-		// 			pos.z -= diff.z * (DROP_PHYSIC_SIZE - dist);
-		// 		}
-		// 	}
-		// }
-		// (*drop)->setVelocity(velocity);
-		// (*drop)->setPos(pos);
 	}
 	return drops;
-	// Octree		*tmpPtr;
-	// tmpPtr = *dropsOctree;
-	// delete tmpPtr;
-	//
-	// Octree::count = 0;
-	// *dropsOctree = new Octree(glm::vec3(Context::size / 2, Context::size / 2, Context::size / 2), glm::vec3(Context::size / 2, Context::size / 2, Context::size / 2));
-	//
-	// for (auto it = drops.begin(); it != drops.end(); ++it) {
-	// 	std::cout << Octree::count << std::endl;
-	// 	(*dropsOctree)->insert(*it);
-	// }
-
-	// *dropsOctree = tmpOctree;
-
 }

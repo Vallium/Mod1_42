@@ -82,6 +82,8 @@ void		Octree::insert(Drop* point) {
 			// know it's guaranteed to be in this section of the tree)
 			if (oldPoint->getPos() != point->getPos())
 				children[getOctantContainingPoint(oldPoint->getPos())]->insert(oldPoint);
+			// else
+			// 	std::cout << "pop\n";
 			children[getOctantContainingPoint(point->getPos())]->insert(point);
 		}
 	}
