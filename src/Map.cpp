@@ -16,11 +16,13 @@ float		Map::interpolate(float x, float z) {
 	float	y = 0.0f;
 
 	for (auto it = _points.begin(); it != _points.end(); ++it) {
-		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z));
-		float	tmpY = it->y - dist;
+		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z)) / 7500.0f;
+		float	coef = 1.0f - dist * dist;
+		coef = coef < 0 ? 0 : coef;
+		float	tmpY = it->y * coef;
 
-		if (tmpY >= 0.0f)
-			y = tmpY;
+		if (tmpY * coef > y)
+			y = tmpY * coef;
 	}
 	return y;
 }
