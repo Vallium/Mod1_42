@@ -15,6 +15,8 @@
 
 # include "Shader.hpp"
 
+# define ZOOM 100.0f
+
 class	Renderer {
 private:
 	Shader		*_landShader;

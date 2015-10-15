@@ -126,7 +126,7 @@ void	Context::initMap(int ac, char **av) {
 #define NB_DROPS 20.0f
 
 void	Context::initWorld() {
-	camera = new Camera(glm::vec3(15000, 15000, 15000));
+	camera = new Camera(glm::vec3(30000 / ZOOM, 30000 / ZOOM, 30000 / ZOOM));
 	particleMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
 	drops = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
@@ -137,19 +137,19 @@ void	Context::initWorld() {
 	unsigned int particleElementBufferSize;
 	GLfloat		*particleVertexBuffer = nullptr;
 	GLuint		*particleElementBuffer = nullptr;
-	generateCubeMesh(DROP_RENDER_SIZE, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
+	generateCubeMesh(DROP_RENDER_SIZE / ZOOM, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	// for (float x = 0; x < NB_DROPS; x++) {
-	// 	for (float y = 0; y < NB_DROPS; y++) {
-	// 		// for (float z = 0; z < NB_DROPS; z++) {
-	// 			drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, size, y * size / NB_DROPS)));
-	// 		// }
-	// 	}
-	// }
+	for (float x = 0; x < NB_DROPS; x++) {
+		for (float y = 0; y < NB_DROPS; y++) {
+			for (float z = 0; z < NB_DROPS; z++) {
+				drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, 10000 + y * 10000 / NB_DROPS, z * size / NB_DROPS)));
+			}
+		}
+	}
 
-	drops->insert(new Drop(glm::vec3(250, 15000, 200)));
+	// drops->insert(new Drop(glm::vec3(250, 15000, 200)));
 	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
 }
 
@@ -205,9 +205,9 @@ void	Context::update() {
 	GLfloat		*tmp = new float[tmpSize];
 	unsigned int i = 0;
 	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it) {
-		tmp[i++] = (*it)->getPos().x;
-		tmp[i++] = (*it)->getPos().y;
-		tmp[i++] = (*it)->getPos().z;
+		tmp[i++] = (*it)->getPos().x / ZOOM;
+		tmp[i++] = (*it)->getPos().y / ZOOM;
+		tmp[i++] = (*it)->getPos().z / ZOOM;
 	}
 	// std::cout << drops->count << std::endl;
 
