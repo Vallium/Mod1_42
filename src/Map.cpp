@@ -15,15 +15,14 @@ void		Map::addPoint(glm::vec3 const &pt) {
 float		Map::interpolate(float x, float z) {
 	float	y = 0.0f;
 
-	float		i = 0.0f;
 	for (auto it = _points.begin(); it != _points.end(); ++it) {
-		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z)) / 75.0f;
-		float	tmpY = it->y - dist * dist;
+		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z));
+		float	tmpY = it->y - dist;
 
 		if (tmpY >= 0.0f)
-			i++, y += tmpY;
+			y = tmpY;
 	}
-	return y / i;
+	return y;
 }
 
 void		Map::render(Renderer *r) {
