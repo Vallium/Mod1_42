@@ -43,7 +43,7 @@ std::vector<glm::vec3>		parse(std::string name) {
 
 			std::vector<std::string> coords = split(tmp, ',');
 
-			out.push_back(glm::vec3(stof(coords[0]), stof(coords[1]), stof(coords[2])));
+			out.push_back(glm::vec3(stof(coords[0]), stof(coords[2]), stof(coords[1])));
 		}
 	}
 	file.close();

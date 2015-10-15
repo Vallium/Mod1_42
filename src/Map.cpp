@@ -16,8 +16,8 @@ float		Map::interpolate(float x, float z) {
 	float	y = 0.0f;
 
 	for (auto it = _points.begin(); it != _points.end(); ++it) {
-		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z));
-		float	tmpY = it->y - dist;
+		float	dist = sqrt((x - it->x) * (x - it->x) + (z - it->z) * (z - it->z)) / 75.0f;
+		float	tmpY = it->y - dist * dist;
 
 		if (tmpY > y)
 			y = tmpY;

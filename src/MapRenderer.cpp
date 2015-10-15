@@ -22,42 +22,42 @@ void	MapRenderer::generateMesh(Map *map) {
 			buffer[i++] = x;
 			buffer[i++] = map->interpolate(x, z);
 			buffer[i++] = z;
-			buffer[i++] = 0.8f * map->interpolate(x, z) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x, z) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 
 			buffer[i++] = x;
 			buffer[i++] = map->interpolate(x, z + step);
 			buffer[i++] = z + step;
-			buffer[i++] = 0.8f * map->interpolate(x, z + step) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x, z + step) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 
 			buffer[i++] = x + step;
 			buffer[i++] = map->interpolate(x + step, z);
 			buffer[i++] = z;
-			buffer[i++] = 0.8f * map->interpolate(x + step, z) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x + step, z) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 
 			buffer[i++] = x + step;
 			buffer[i++] = map->interpolate(x + step, z + step);
 			buffer[i++] = z + step;
-			buffer[i++] = 0.8f * map->interpolate(x + step, z + step) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x + step, z + step) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 
 			buffer[i++] = x;
 			buffer[i++] = map->interpolate(x, z + step);
 			buffer[i++] = z + step;
-			buffer[i++] = 0.8f * map->interpolate(x, z + step) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x, z + step) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 
 			buffer[i++] = x + step;
 			buffer[i++] = map->interpolate(x + step, z);
 			buffer[i++] = z;
-			buffer[i++] = 0.8f * map->interpolate(x + step, z) / 20000.0f;
+			buffer[i++] = 0.8f * map->interpolate(x + step, z) / 5000.0f;
 			buffer[i++] = 0.4f;
 			buffer[i++] = 0.0f;
 		}
