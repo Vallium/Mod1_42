@@ -43,7 +43,7 @@ endif
 
 ifeq ($(UNAME_S),Darwin)
 	INCLUDES	= -I glfw/include -I glm/ -I glew/include
-	LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -ldl
+	LIBS		= -Lglfw/src -Lglew/lib -lglfw3 -lGLEW -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework OpenCL -ldl
 endif
 
 OBJ			= $(patsubst %.cpp,$(STATIC_DIR)/%.o,$(SRC))
