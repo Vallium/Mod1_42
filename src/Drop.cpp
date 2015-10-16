@@ -82,6 +82,8 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		}
 
 		if (pos.x + velocity.x * dt >= Context::size - DROP_PHYSIC_SIZE / 2.0f) {
+			if (pos.x > Context::size - DROP_PHYSIC_SIZE / 2.0f)
+				pos.x = Context::size - DROP_PHYSIC_SIZE / 2.0f;
 			velocity.y = -velocity.y * 0.5f;
 			velocity.x = -velocity.x * 0.5f;
 			velocity.z = -velocity.z * 0.5f;
@@ -91,6 +93,8 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		}
 
 		else if (pos.x + velocity.x * dt < 0 + DROP_PHYSIC_SIZE / 2.0f) {
+			if (pos.x < DROP_PHYSIC_SIZE / 2.0f)
+				pos.x = DROP_PHYSIC_SIZE / 2.0f;
 			velocity.y = -velocity.y * 0.5f;
 			velocity.x = -velocity.x * 0.5f;
 			velocity.z = -velocity.z * 0.5f;
@@ -100,6 +104,8 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 		}
 
 		if (pos.z + velocity.z * dt >= Context::size - DROP_PHYSIC_SIZE / 2.0f) {
+			if (pos.z > Context::size - DROP_PHYSIC_SIZE / 2.0f)
+				pos.z = Context::size - DROP_PHYSIC_SIZE / 2.0f;
 			velocity.y = -velocity.y * 0.5f;
 			velocity.x = -velocity.x * 0.5f;
 			velocity.z = -velocity.z * 0.5f;
@@ -108,6 +114,8 @@ std::vector<Drop*>		Drop::update(Octree **dropsOctree, float dt) {
 			velocity = glm::rotate(velocity, 180.0f, n);
 		}
 		else if (pos.z + velocity.z * dt < 0 + DROP_PHYSIC_SIZE / 2.0f) {
+			if (pos.z < DROP_PHYSIC_SIZE / 2.0f)
+				pos.z = DROP_PHYSIC_SIZE / 2.0f;
 			velocity.y = -velocity.y * 0.5f;
 			velocity.x = -velocity.x * 0.5f;
 			velocity.z = -velocity.z * 0.5f;
