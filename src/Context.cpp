@@ -80,7 +80,7 @@ void	Context::initGLFW() {
 	// get the actual size of the window in pixels on displays that use window
 	glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
-	srand(1234);
+	std::srand(std::time(0));
 
 	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
