@@ -141,9 +141,9 @@ void	Context::initWorld() {
 	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
 	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
 
-	for (float x = 0; x < NB_DROPS; x++) {
-		for (float y = 0; y < NB_DROPS; y++) {
-			for (float z = 0; z < NB_DROPS; z++) {
+	for (float x = 1; x < NB_DROPS; x++) {
+		for (float y = 1; y < NB_DROPS; y++) {
+			for (float z = 1; z < NB_DROPS; z++) {
 				drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, 10000 + y * 10000 / NB_DROPS, z * size / NB_DROPS)));
 			}
 		}
