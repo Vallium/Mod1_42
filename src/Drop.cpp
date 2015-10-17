@@ -12,7 +12,7 @@
 
 #include "Drop.hpp"
 #include "Context.hpp"
-#include "map.hpp"
+#include "Map.hpp"
 #include <iostream>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/rotate_vector.hpp>

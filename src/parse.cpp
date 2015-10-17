@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "map.hpp"
+#include "Map.hpp"
 
 #include <iostream>
 #include <sstream>

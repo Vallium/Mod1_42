@@ -1,5 +1,5 @@
 #include "Context.hpp"
-#include "map.hpp"
+#include "Map.hpp"
 #include "sphere.hpp"
 
 #define GLEW_STATIC
