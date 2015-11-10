@@ -16,6 +16,7 @@
 #include "InputManager.hpp"
 #include "Drop.hpp"
 #include "Octree.hpp"
+#include "WaterMap.hpp"
 
 #include "Map.hpp"
 
@@ -33,10 +34,11 @@ namespace Context {
 
 	extern Map				*map;
 	extern Renderer 		*renderer;
-	extern Mesh				*particleMesh;
-	extern Octree			*drops;
+	// extern Mesh				*particleMesh;
+	// extern Octree			*drops;
 	extern Camera 			*camera;
 	extern InputManager 	*inputManager;
+	extern WaterMap			*waterMap;
 
 	extern glm::mat4		projection;
 

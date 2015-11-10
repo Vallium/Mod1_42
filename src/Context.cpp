@@ -42,9 +42,10 @@ int		Context::windowHeight = 1080;
 Map				*Context::map;
 Renderer 		*Context::renderer;
 Camera 			*Context::camera;
-Mesh			*Context::particleMesh;
+// Mesh			*Context::particleMesh;
+WaterMap		*Context::waterMap;
 InputManager	*Context::inputManager;
-Octree			*Context::drops;
+// Octree			*Context::drops;
 
 glm::mat4		Context::projection;
 
@@ -127,27 +128,31 @@ void	Context::initMap(int ac, char **av) {
 
 void	Context::initWorld() {
 	camera = new Camera(glm::vec3(30000 / ZOOM, 30000 / ZOOM, 30000 / ZOOM));
-	particleMesh = new Mesh();
+	// particleMesh = new Mesh();
 	inputManager = new InputManager(window, camera);
-	drops = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
+	// drops = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
+
+	waterMap = new WaterMap(map);
 
 	map->generateMesh();
 
-	unsigned int particleVertexBufferSize;
-	unsigned int particleElementBufferSize;
-	GLfloat		*particleVertexBuffer = nullptr;
-	GLuint		*particleElementBuffer = nullptr;
-	generateCubeMesh(DROP_RENDER_SIZE / ZOOM, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
-	particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
-	particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
+	waterMap->generateMesh();
 
-	for (float x = 1; x < NB_DROPS; x++) {
-		for (float y = 1; y < NB_DROPS; y++) {
-			for (float z = 1; z < NB_DROPS; z++) {
-				drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, 10000 + y * 10000 / NB_DROPS, z * size / NB_DROPS)));
-			}
-		}
-	}
+	// unsigned int particleVertexBufferSize;
+	// unsigned int particleElementBufferSize;
+	// GLfloat		*particleVertexBuffer = nullptr;
+	// GLuint		*particleElementBuffer = nullptr;
+	// generateCubeMesh(DROP_RENDER_SIZE / ZOOM, &particleVertexBuffer, particleVertexBufferSize, &particleElementBuffer, particleElementBufferSize);
+	// particleMesh->setVertexBuffer(particleVertexBuffer, particleVertexBufferSize);
+	// particleMesh->setElementBuffer(particleElementBuffer, particleElementBufferSize);
+
+	// for (float x = 1; x < NB_DROPS; x++) {
+	// 	for (float y = 1; y < NB_DROPS; y++) {
+	// 		for (float z = 1; z < NB_DROPS; z++) {
+	// 			drops->insert(new Drop(glm::vec3(x * size / NB_DROPS, 10000 + y * 10000 / NB_DROPS, z * size / NB_DROPS)));
+	// 		}
+	// 	}
+	// }
 
 	// drops->insert(new Drop(glm::vec3(250, 15000, 200)));
 	// drops->insert(new Drop(glm::vec3(1, 250, 1)));
@@ -197,38 +202,38 @@ void	Context::update() {
 
 	// Drop::update(&drops, deltaTime);
 
-	std::vector<Drop*> dropsTmp = Drop::update(&drops, deltaTime);
+	// std::vector<Drop*> dropsTmp = Drop::update(&drops, deltaTime);
 
 	// drops->getPointsInsideBox(glm::vec3(0, 0, 0), glm::vec3(Context::size, Context::size, Context::size), dropsTmp);
 
-	unsigned int tmpSize = dropsTmp.size() * 3;
-	GLfloat		*tmp = new float[tmpSize];
-	unsigned int i = 0;
-	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it) {
-		tmp[i++] = (*it)->getPos().x / ZOOM;
-		tmp[i++] = (*it)->getPos().y / ZOOM;
-		tmp[i++] = (*it)->getPos().z / ZOOM;
-	}
+	// unsigned int tmpSize = dropsTmp.size() * 3;
+	// GLfloat		*tmp = new float[tmpSize];
+	// unsigned int i = 0;
+	// for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it) {
+	// 	tmp[i++] = (*it)->getPos().x / ZOOM;
+	// 	tmp[i++] = (*it)->getPos().y / ZOOM;
+	// 	tmp[i++] = (*it)->getPos().z / ZOOM;
+	// }
 	// std::cout << drops->count << std::endl;
 
-	GLfloat		*tmpPtr = particleMesh->getInstanceBuffer();
-
-	if (tmpPtr != nullptr)
-		delete [] tmpPtr;
-
-	particleMesh->setInstanceBuffer(tmp, i);
-
-	Octree	*tmpPtr2;
-
-	Octree::count = 0;
-	Octree	*tmpPtr3 = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
-
-	tmpPtr2 = drops;
-	drops = tmpPtr3;
-	delete tmpPtr2;
-
-	for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it)
-		drops->insert(*it);
+	// GLfloat		*tmpPtr = particleMesh->getInstanceBuffer();
+	//
+	// if (tmpPtr != nullptr)
+	// 	delete [] tmpPtr;
+	//
+	// particleMesh->setInstanceBuffer(tmp, i);
+	//
+	// Octree	*tmpPtr2;
+	//
+	// Octree::count = 0;
+	// Octree	*tmpPtr3 = new Octree(glm::vec3(10000, 10000, 10000), glm::vec3(10000, 10000, 10000));
+	//
+	// tmpPtr2 = drops;
+	// drops = tmpPtr3;
+	// delete tmpPtr2;
+	//
+	// for (auto it = dropsTmp.begin(); it != dropsTmp.end(); ++it)
+	// 	drops->insert(*it);
 }
 
 void	Context::draw() {
@@ -246,9 +251,10 @@ void	Context::draw() {
 	renderer->getLandShader()->Use();
 	glUniformMatrix4fv(glGetUniformLocation(renderer->getLandShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
 	map->render(renderer);
-	renderer->getSphereShader()->Use();
-	glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
-	particleMesh->render(renderer->getSphereShader(), drops->count);
+	waterMap->render(renderer);
+	// renderer->getSphereShader()->Use();
+	// glUniformMatrix4fv(glGetUniformLocation(renderer->getSphereShader()->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(MVP));
+	// particleMesh->render(renderer->getSphereShader(), drops->count);
 
 	// Swap the buffers
 	glfwSwapBuffers(window);
@@ -257,7 +263,7 @@ void	Context::draw() {
 void	Context::deinit() {
 	delete renderer;
 	delete inputManager;
-	delete particleMesh;
+	// delete particleMesh;
 
 	//TODO: Properly de-allocate all resources once they've outlived their purpose
 	glfwTerminate();

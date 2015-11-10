@@ -25,7 +25,9 @@ SRC			=	main.cpp		\
 				MapRenderer.cpp			\
 				Drop.cpp		\
 				sphere.cpp		\
-				Octree.cpp
+				Octree.cpp		\
+				WaterMap.cpp	\
+				WaterMapRenderer.cpp
 
 HEAD_DIR	= includes
 SRC_DIR		= src
